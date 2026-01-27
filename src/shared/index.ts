@@ -1,0 +1,1 @@
+export { WikiEditor } from './components';
