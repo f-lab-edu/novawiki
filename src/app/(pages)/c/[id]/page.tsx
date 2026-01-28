@@ -1,4 +1,3 @@
-import WikiDiffViewer from "@/widgets/compare/WikiDiffViewer";
 
 export default function Compare() {
   return (
