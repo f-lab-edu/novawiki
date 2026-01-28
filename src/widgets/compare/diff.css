@@ -1,0 +1,31 @@
+.wiki-diff {
+  font-family: monospace;
+  white-space: pre-wrap;
+  border: 1px solid #ddd;
+}
+
+.diff-line {
+  padding: 4px 8px;
+}
+
+.diff-line.added {
+  background: #e6ffed;
+}
+
+.diff-line.removed {
+  background: #ffeef0;
+}
+
+.diff-line.normal {
+  background: white;
+}
+
+.diff-word-added {
+  background: #acf2bd;
+  font-weight: bold;
+}
+
+.diff-word-removed {
+  background: #fdb8c0;
+  text-decoration: line-through;
+}
