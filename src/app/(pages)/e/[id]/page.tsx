@@ -1,14 +1,17 @@
-import { WikiEditor } from "@/shared";
 
 export default function Edit() {
   return (
     <div>
-      <WikiEditor content="" />
       편집 페이지
-      {/* <textarea>
+      {/* 입력 영역 */}
+      <textarea>
+
       </textarea>
+
+      {/* 미리보기 */}
       <div>
-      </div> */}
+
+      </div>
     </div>
   );
 }
