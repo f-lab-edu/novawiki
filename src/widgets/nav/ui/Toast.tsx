@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useToastStore } from "@/shared/lib/store/useToastStore";
-
+import { useToastStore } from "@/store/useToastStore";
 
 const typeStyles: Record<string, string> = {
-  success: 'bg-green-500',
-  error: 'bg-red-500',
-  info: 'bg-blue-500',
-  warning: 'bg-yellow-500 text-black',
+  success: "bg-green-500",
+  error: "bg-red-500",
+  info: "bg-blue-500",
+  warning: "bg-yellow-500 text-black",
 };
 
 export function Toast() {
@@ -17,10 +16,12 @@ export function Toast() {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-      {toasts.map(toast => (
+      {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`${typeStyles[toast.type]} min-w-64 rounded-lg px-4 py-3 text-white shadow-lg animate-[slideIn_0.3s_ease-out]`}
+          className={`${
+            typeStyles[toast.type]
+          } min-w-64 rounded-lg px-4 py-3 text-white shadow-lg animate-[slideIn_0.3s_ease-out]`}
         >
           <div className="flex items-center justify-between gap-3">
             <span className="text-sm">{toast.message}</span>

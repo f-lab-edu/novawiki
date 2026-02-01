@@ -1,11 +1,14 @@
-'use client'
+"use client";
 
 import "./style/diff.css";
 import React, { useEffect } from "react";
 import { diffLines, diffWords } from "diff";
-import { useToastStore } from "@/shared/lib/store/useToastStore";
+import { useToastStore } from "@/store/useToastStore";
 
-function highlightWordDiff(oldLine: string, newLine: string): React.ReactNode[] {
+function highlightWordDiff(
+  oldLine: string,
+  newLine: string
+): React.ReactNode[] {
   const wordDiff = diffWords(oldLine, newLine);
 
   return wordDiff.map((part, i) => {
@@ -27,7 +30,13 @@ function highlightWordDiff(oldLine: string, newLine: string): React.ReactNode[] 
   });
 }
 
-export function WikiDiffViewer({ oldText, newText }: { oldText: string, newText: string }) {
+export function WikiDiffViewer({
+  oldText,
+  newText,
+}: {
+  oldText: string;
+  newText: string;
+}) {
   const lineDiff = diffLines(oldText, newText);
 
   const rows = [];
@@ -37,11 +46,7 @@ export function WikiDiffViewer({ oldText, newText }: { oldText: string, newText:
     const part = lineDiff[i];
 
     // 변경된 줄 쌍 (삭제 후 추가)
-    if (
-      part.removed &&
-      i + 1 < lineDiff.length &&
-      lineDiff[i + 1].added
-    ) {
+    if (part.removed && i + 1 < lineDiff.length && lineDiff[i + 1].added) {
       const removedLine = part.value;
       const addedLine = lineDiff[i + 1].value;
 
@@ -84,13 +89,20 @@ export function WikiDiffViewer({ oldText, newText }: { oldText: string, newText:
     i++;
   }
 
-  const { addToast } = useToastStore()
+  const { addToast } = useToastStore();
   useEffect(() => {
-
-    addToast('저장되었습니다', 'error');
-    addToast('저장되었습니다', 'success');
-    addToast('저장되었습니다', 'success');
+    addToast("저장되었습니다", "error");
+    addToast("저장되었습니다", "success");
+    addToast("저장되었습니다", "success");
   }, [addToast]);
 
-  return <div className="wiki-diff" onClick={() => addToast('저장되었습니다', 'success')}> {rows}</div >;
+  return (
+    <div
+      className="wiki-diff"
+      onClick={() => addToast("저장되었습니다", "success")}
+    >
+      {" "}
+      {rows}
+    </div>
+  );
 }

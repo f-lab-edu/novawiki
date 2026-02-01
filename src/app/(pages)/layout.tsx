@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/shared/lib/tanstack/providers";
+import Providers from "@/lib/tanstack/providers";
 import { Footer, Header, Toast } from "@/widgets";
-import { Layout } from "@/shared";
+import { Layout } from "@/components";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,9 +19,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <Layout>
-            {children}
-          </Layout>
+          <Layout>{children}</Layout>
           <Toast />
           <Footer />
         </Providers>
