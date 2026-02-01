@@ -3,7 +3,7 @@
 import "./style/diff.css";
 import React, { useEffect } from "react";
 import { diffLines, diffWords } from "diff";
-import { useToastStore } from "@/shared/lIb/store/useToastStore";
+import { useToastStore } from "@/shared/lib/store/useToastStore";
 
 function highlightWordDiff(oldLine: string, newLine: string): React.ReactNode[] {
   const wordDiff = diffWords(oldLine, newLine);

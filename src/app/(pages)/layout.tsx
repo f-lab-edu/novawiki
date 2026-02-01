@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/shared/lIb/tanstack/providers";
+import Providers from "@/shared/lib/tanstack/providers";
 import { Footer, Header, Toast } from "@/widgets";
 import { Layout } from "@/shared";
 

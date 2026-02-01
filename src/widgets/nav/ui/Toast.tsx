@@ -1,6 +1,6 @@
 'use client';
 
-import { useToastStore } from "@/shared/lIb/store/useToastStore";
+import { useToastStore } from "@/shared/lib/store/useToastStore";
 
 
 const typeStyles: Record<string, string> = {
