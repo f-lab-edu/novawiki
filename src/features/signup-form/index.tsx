@@ -96,107 +96,104 @@ export function SignUpForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="scroll-m-20 font-extrabold text-xl !mb-4">회원가입</h1>
-      <form action={formAction} className="w-100" onSubmit={handleSignUpSubmit}>
-        <FieldGroup>
-          <Field data-invalid={!!useridError}>
-            <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>
-            <Input
-              id="input-field-userid"
-              type="text"
-              name="userid"
-              value={userid}
-              onChange={handleUseridChange}
-              placeholder="Enter your ID"
-              aria-invalid={!!useridError}
-            />
-            {isValidUserid ? (
-              <></>
-            ) : useridError ? (
-              <FieldDescription className="text-red-500">
-                {useridError}
-              </FieldDescription>
-            ) : (
-              <FieldDescription>
-                영어와 숫자를 조합해 5자 이상으로 입력해주세요.
-              </FieldDescription>
-            )}
-          </Field>
-          <Field data-invalid={!!passwordError}>
-            <FieldLabel htmlFor="input-field-password">비밀번호</FieldLabel>
-            <Input
-              id="input-field-password"
-              type="password"
-              name="password"
-              placeholder="Enter your Password"
-              value={password}
-              onChange={handlePasswordChange}
-              aria-invalid={!!passwordError}
-            />
-            {isValidPassword ? (
-              <></>
-            ) : passwordError ? (
-              <FieldDescription className="text-red-500">
-                {passwordError}
-              </FieldDescription>
-            ) : (
-              <FieldDescription>
-                영어, 숫자, 특수문자를 조합해 8자 이상으로 입력해주세요.
-              </FieldDescription>
-            )}
-          </Field>
-          <Field data-invalid={!!passwordChkError}>
-            <FieldLabel htmlFor="input-field-passwordChk">
-              비밀번호 확인
-            </FieldLabel>
-            <Input
-              id="input-field-passwordChk"
-              type="password"
-              name="passwordChk"
-              placeholder="Enter your Password Again"
-              value={passwordChk}
-              onChange={handlePasswordChkChange}
-              aria-invalid={!!passwordChkError}
-            />
-            {isValidPasswordChk ? (
-              <></>
-            ) : passwordChkError ? (
-              <FieldDescription className="text-red-500">
-                {passwordChkError}
-              </FieldDescription>
-            ) : (
-              <FieldDescription>비밀번호를 다시 입력해주세요.</FieldDescription>
-            )}
-          </Field>
-          <Field data-invalid={!!nickError}>
-            <FieldLabel htmlFor="input-field-password">닉네임</FieldLabel>
-            <Input
-              id="input-field-password"
-              type="text"
-              name="nick"
-              placeholder="Enter your Nickname"
-              value={nick}
-              onChange={handleNickChange}
-              aria-invalid={!!nickError}
-            />
-            {isValidNick ? (
-              <></>
-            ) : nickError ? (
-              <FieldDescription className="text-red-500">
-                {nickError}
-              </FieldDescription>
-            ) : (
-              <FieldDescription>
-                특수문자를 제외하고 입력해주세요.
-              </FieldDescription>
-            )}
-          </Field>
-          <Button type="submit" className="w-full cursor-pointer">
-            회원가입
-          </Button>
-        </FieldGroup>
-      </form>
-    </div>
+    <form action={formAction} className="w-100" onSubmit={handleSignUpSubmit}>
+      <FieldGroup>
+        <Field data-invalid={!!useridError}>
+          <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>
+          <Input
+            id="input-field-userid"
+            type="text"
+            name="userid"
+            value={userid}
+            onChange={handleUseridChange}
+            placeholder="Enter your ID"
+            aria-invalid={!!useridError}
+          />
+          {isValidUserid ? (
+            <></>
+          ) : useridError ? (
+            <FieldDescription className="text-red-500">
+              {useridError}
+            </FieldDescription>
+          ) : (
+            <FieldDescription>
+              영어와 숫자를 조합해 5자 이상으로 입력해주세요.
+            </FieldDescription>
+          )}
+        </Field>
+        <Field data-invalid={!!passwordError}>
+          <FieldLabel htmlFor="input-field-password">비밀번호</FieldLabel>
+          <Input
+            id="input-field-password"
+            type="password"
+            name="password"
+            placeholder="Enter your Password"
+            value={password}
+            onChange={handlePasswordChange}
+            aria-invalid={!!passwordError}
+          />
+          {isValidPassword ? (
+            <></>
+          ) : passwordError ? (
+            <FieldDescription className="text-red-500">
+              {passwordError}
+            </FieldDescription>
+          ) : (
+            <FieldDescription>
+              영어, 숫자, 특수문자를 조합해 8자 이상으로 입력해주세요.
+            </FieldDescription>
+          )}
+        </Field>
+        <Field data-invalid={!!passwordChkError}>
+          <FieldLabel htmlFor="input-field-passwordChk">
+            비밀번호 확인
+          </FieldLabel>
+          <Input
+            id="input-field-passwordChk"
+            type="password"
+            name="passwordChk"
+            placeholder="Enter your Password Again"
+            value={passwordChk}
+            onChange={handlePasswordChkChange}
+            aria-invalid={!!passwordChkError}
+          />
+          {isValidPasswordChk ? (
+            <></>
+          ) : passwordChkError ? (
+            <FieldDescription className="text-red-500">
+              {passwordChkError}
+            </FieldDescription>
+          ) : (
+            <FieldDescription>비밀번호를 다시 입력해주세요.</FieldDescription>
+          )}
+        </Field>
+        <Field data-invalid={!!nickError}>
+          <FieldLabel htmlFor="input-field-password">닉네임</FieldLabel>
+          <Input
+            id="input-field-password"
+            type="text"
+            name="nick"
+            placeholder="Enter your Nickname"
+            value={nick}
+            onChange={handleNickChange}
+            aria-invalid={!!nickError}
+          />
+          {isValidNick ? (
+            <></>
+          ) : nickError ? (
+            <FieldDescription className="text-red-500">
+              {nickError}
+            </FieldDescription>
+          ) : (
+            <FieldDescription>
+              특수문자를 제외하고 입력해주세요.
+            </FieldDescription>
+          )}
+        </Field>
+        <Button type="submit" className="w-full cursor-pointer">
+          회원가입
+        </Button>
+      </FieldGroup>
+    </form>
   );
 }

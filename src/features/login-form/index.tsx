@@ -27,41 +27,38 @@ export function LoginForm() {
   const [state, formAction] = useActionState(login, { error: null });
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="scroll-m-20 font-extrabold text-xl !mb-4">로그인</h1>
-      <form action={formAction} className="w-100">
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>
-            <Input
-              id="input-field-userid"
-              type="text"
-              name="userid"
-              value={userid}
-              onChange={handleUseridChange}
-              placeholder="Enter your ID"
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="input-field-password">비밀번호</FieldLabel>
-            <Input
-              id="input-field-password"
-              type="password"
-              name="password"
-              placeholder="Enter your Password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </Field>
-          <FieldDescription>
-            특수문자를 제외하고 입력해주세요.
-          </FieldDescription>
-          <Button type="submit" className="w-full cursor-pointer">
-            회원가입
-          </Button>
-        </FieldGroup>
-        {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
-      </form>
-    </div>
+    <form action={formAction} className="w-100">
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>
+          <Input
+            id="input-field-userid"
+            type="text"
+            name="userid"
+            value={userid}
+            onChange={handleUseridChange}
+            placeholder="Enter your ID"
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="input-field-password">비밀번호</FieldLabel>
+          <Input
+            id="input-field-password"
+            type="password"
+            name="password"
+            placeholder="Enter your Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+        </Field>
+        <FieldDescription>
+          특수문자를 제외하고 입력해주세요.
+        </FieldDescription>
+        <Button type="submit" className="w-full cursor-pointer">
+          회원가입
+        </Button>
+      </FieldGroup>
+      {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
+    </form>
   );
 }
