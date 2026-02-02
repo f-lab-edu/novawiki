@@ -1,18 +1,17 @@
 "use server";
 
-import { Api } from "@/lib/api/api";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-type LoginState = {
+type AuthState = {
   error: string | null;
 };
 
 /** 로그인 */
 export async function login(
-  prevState: LoginState,
+  prevState: AuthState,
   formData: FormData
-): Promise<LoginState> {
+): Promise<AuthState> {
   const userid = formData.get("userid") as string;
   const password = formData.get("password") as string;
   const email = `${userid}@novawiki.com`;
@@ -35,16 +34,11 @@ export async function login(
   redirect("/");
 }
 
-type SignUpState = {
-  error: string | null;
-};
-
 /** 회원가입 */
 export async function signUp(
-  prevState: SignUpState,
+  prevState: AuthState,
   formData: FormData
-): Promise<SignUpState> {
-  console.log(formData);
+): Promise<AuthState> {
   // FormData
   const userid = formData.get("userid") as string;
   const password = formData.get("password") as string;
@@ -89,6 +83,23 @@ export async function signUp(
 
 /** 로그아웃 */
 export async function logout() {
-  await Api.auth.logout();
+  const supabase = await createClient();
+  await supabase.auth.signOut();
   redirect("/login");
+}
+
+/** 비밀번호 변경 */
+export async function updatePassword(
+  prevState: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const newPassword = formData.get("newPassword") as string;
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+  if (error) {
+    return { error: "알 수 없는 오류가 발생했습니다." };
+  }
+  redirect("/");
 }
