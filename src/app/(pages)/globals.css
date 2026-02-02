@@ -1,6 +1,14 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
 
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 45 920;
+	font-style: normal;
+	font-display: swap;
+	src: url('../../assets/fonts/PretendardVariable.woff2') format('woff2-variations');
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @keyframes slideIn {
@@ -19,6 +27,7 @@
   margin: 0;
   /* padding: 0; */
   box-sizing: border-box;
+  font-family: 'Pretendard';
 }
 
 @theme inline {
