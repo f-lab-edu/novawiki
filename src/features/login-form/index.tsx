@@ -52,13 +52,12 @@ export function LoginForm() {
           />
         </Field>
         <FieldDescription>
-          특수문자를 제외하고 입력해주세요.
+          {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
         </FieldDescription>
         <Button type="submit" className="w-full cursor-pointer">
-          회원가입
+          로그인
         </Button>
       </FieldGroup>
-      {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
     </form>
   );
 }
