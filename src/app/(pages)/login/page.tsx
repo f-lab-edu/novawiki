@@ -1,11 +1,11 @@
-import { login } from "@/app/(server)/actions/auth";
+import { LoginForm } from "@/features";
 
 export default function Login() {
+
   return (
-    <form action={login}>
-      <input name="userid" type="text" placeholder="아이디" />
-      <input name="password" type="password" placeholder="비밀번호" />
-      <button type="submit">로그인</button>
-    </form>
-  )
+    <div className="flex flex-col items-center">
+      <h1 className="scroll-m-20 font-extrabold text-xl !mb-4">로그인</h1>
+      <LoginForm />
+    </div>
+  );
 }

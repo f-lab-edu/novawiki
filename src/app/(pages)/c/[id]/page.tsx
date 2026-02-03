@@ -1,4 +1,4 @@
-import { WikiDiffViewer } from "@/widgets";
+import { WikiDiffViewer } from "@/features";
 
 export default function Compare() {
   return (

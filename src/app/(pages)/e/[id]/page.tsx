@@ -1,4 +1,4 @@
-import { WikiEditor } from "@/shared";
+import { WikiEditor } from "@/features";
 
 export default function Edit() {
   return (

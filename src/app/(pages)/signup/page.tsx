@@ -1,13 +1,11 @@
-import { signUp } from "@/app/(server)/actions/auth";
+import { SignUpForm } from "@/features";
 
 export default function SignUp() {
+
   return (
-    <form action={signUp}>
-      <input name="userid" type="text" placeholder="아이디" />
-      <input name="password" type="password" placeholder="비밀번호" />
-      <input type="password" placeholder="비밀번호 확인" />
-      <input name="nick" type="nick" placeholder="닉네임" />
-      <button type="submit">회원가입</button>
-    </form>
-  )
+    <div className="flex flex-col items-center">
+      <h1 className="scroll-m-20 font-extrabold text-xl !mb-4">회원가입</h1>
+      <SignUpForm />
+    </div>
+  );
 }

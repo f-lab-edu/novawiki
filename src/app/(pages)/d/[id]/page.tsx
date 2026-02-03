@@ -1,4 +1,5 @@
-import { Button, WikiViewer } from "@/shared";
+import { Button } from "@/components";
+import { WikiViewer } from "@/features";
 
 export default function Document() {
   return (
