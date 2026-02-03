@@ -8,7 +8,7 @@ export function Header() {
     <header className="flex justify-center">
       <div className="flex justify-between w-full lg:w-[1200px] h-[60px]">
         <div className="flex items-center">
-          <div>
+          <div className="font-extrabold text-2xl tracking-tighter">
             <Link href="/">
               NOVAWIKI
             </Link>

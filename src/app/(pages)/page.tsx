@@ -177,8 +177,8 @@ export default function Home() {
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="absolute left-3 top-1/2 -translate-y-1/2" />
+          <CarouselNext className="absolute right-3 top-1/2 -translate-y-1/2" />
         </Carousel>
       </div>
       <div className="w-full grid grid-cols-3 gap-6 mt-8">
