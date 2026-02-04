@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-export const toastWrapper = (title: string, desc: string) => {
+export const simpleMessageToast = (title: string, desc: string) => {
   toast(title, {
     description: desc,
     action: {

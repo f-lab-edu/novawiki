@@ -17,7 +17,7 @@ import {
   FieldLabel,
   Input,
 } from "@/components";
-import { toastWrapper } from "@/lib/utils/common";
+import { simpleMessageToast } from "@/lib/utils/common";
 
 export function SignUpForm() {
   // 아이디
@@ -42,7 +42,7 @@ export function SignUpForm() {
 
   useEffect(() => {
     if (!state.error) return;
-    toastWrapper(state.error, `${new Date()}`);
+    simpleMessageToast(state.error, `${new Date()}`);
   }, [state]);
 
   // 아이디
@@ -91,22 +91,22 @@ export function SignUpForm() {
     e.preventDefault();
 
     if (!isValidUserid) {
-      toastWrapper("유효하지 않은 아이디입니다.", `${new Date()}`);
+      simpleMessageToast("유효하지 않은 아이디입니다.", `${new Date()}`);
       return;
     }
 
     if (!isValidPassword) {
-      toastWrapper("유효하지 않은 비밀번호입니다.", `${new Date()}`);
+      simpleMessageToast("유효하지 않은 비밀번호입니다.", `${new Date()}`);
       return;
     }
 
     if (!isValidPasswordChk) {
-      toastWrapper("비밀번호가 일치하지 않습니다.", `${new Date()}`);
+      simpleMessageToast("비밀번호가 일치하지 않습니다.", `${new Date()}`);
       return;
     }
 
     if (!isValidNick) {
-      toastWrapper("유효하지 않은 닉네임입니다.", `${new Date()}`);
+      simpleMessageToast("유효하지 않은 닉네임입니다.", `${new Date()}`);
       return;
     }
 
