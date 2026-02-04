@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/tanstackProviders";
-import { Footer, Header, Toast } from "@/widgets";
-import { Layout } from "@/components";
+import { Footer, Header } from "@/widgets";
+import { Layout, Toaster } from "@/components";
 
 export const metadata: Metadata = {
   title: "NOVAWIKI",
@@ -20,7 +20,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Layout>{children}</Layout>
-          <Toast />
+          <Toaster />
           <Footer />
         </Providers>
       </body>

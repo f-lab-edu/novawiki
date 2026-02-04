@@ -55,6 +55,8 @@ export async function signUp(
   if (error) {
     if (error.code === "over_email_send_rate_limit") {
       return { error: "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요." };
+    } else if (error.code === "user_already_exists") {
+      return { error: "이미 사용중인 아이디입니다." };
     } else {
       return { error: "알 수 없는 오류가 발생했습니다." };
     }
@@ -65,9 +67,12 @@ export async function signUp(
     userid,
     email,
     nick,
+    auth_id: data.user?.id,
   };
 
   const { error: dbError } = await supabase.from("user").insert(userData);
+
+  console.log(dbError);
 
   if (dbError) {
     // DB 저장 실패 시 auth 유저 롤백
@@ -75,7 +80,11 @@ export async function signUp(
       const adminClient = createAdminClient();
       await adminClient.auth.admin.deleteUser(data.user.id);
     }
-    return { error: "회원가입에 실패했습니다." };
+    if (dbError.code === "23505") {
+      return { error: "사용중인 닉네임입니다." };
+    } else {
+      return { error: "회원가입에 실패했습니다." };
+    }
   }
 
   redirect("/");
