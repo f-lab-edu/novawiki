@@ -40,7 +40,7 @@ const mockRecent = [
   { title: "인공지능", time: "4시간 전" },
   { title: "위키백과", time: "5시간 전" },
   { title: "서울특별시", time: "6시간 전" },
-]
+];
 
 export default function Home() {
   return (
@@ -51,7 +51,7 @@ export default function Home() {
       <div className="w-full grid grid-cols-3 gap-6">
         {/* 오늘의 인기 문서 */}
         <div className="col-span-2">
-          <h2 className="text-lg font-bold mb-4">오늘의 인기 문서</h2>
+          <h2 className="text-xl font-bold mb-4!">오늘의 인기 문서</h2>
           <div className="flex flex-col gap-3">
             {mockPopular.map((doc, i) => (
               <HomeCard key={`${i}${doc.title}pop`} index={i} doc={doc} />
@@ -61,7 +61,7 @@ export default function Home() {
 
         {/* 최근 수정 문서 */}
         <div className="col-span-1">
-          <h2 className="text-lg font-bold mb-4">최근 수정 문서</h2>
+          <h2 className="text-xl font-bold mb-4!">최근 수정 문서</h2>
           <div className="rounded-lg border divide-y">
             {mockRecent.map((doc, i) => (
               <HomeRecentCard key={`${i}${doc.title}rec`} index={i} doc={doc} />

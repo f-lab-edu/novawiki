@@ -38,7 +38,7 @@ function highlightChanges(
   });
 }
 
-export function SideBySideDiff({
+export function WikiDiffer({
   oldText,
   newText,
   oldVersion,
@@ -65,12 +65,20 @@ export function SideBySideDiff({
       oldLines.push({
         type: "modified",
         content: removedContent,
-        highlightedContent: highlightChanges(removedContent, addedContent, "old"),
+        highlightedContent: highlightChanges(
+          removedContent,
+          addedContent,
+          "old"
+        ),
       });
       newLines.push({
         type: "modified",
         content: addedContent,
-        highlightedContent: highlightChanges(removedContent, addedContent, "new"),
+        highlightedContent: highlightChanges(
+          removedContent,
+          addedContent,
+          "new"
+        ),
       });
 
       i += 2;
@@ -81,10 +89,19 @@ export function SideBySideDiff({
       oldLines.push({ type: "normal", content: "" });
       newLines.push({ type: "added", content: part.value.replace(/\n$/, "") });
     } else if (part.removed) {
-      oldLines.push({ type: "removed", content: part.value.replace(/\n$/, "") });
+      oldLines.push({
+        type: "removed",
+        content: part.value.replace(/\n$/, ""),
+      });
       newLines.push({ type: "normal", content: "" });
     } else {
-      const lines = part.value.split("\n").filter((_, idx, arr) => idx < arr.length - 1 || part.value.slice(-1) !== "\n" ? true : idx < arr.length - 1);
+      const lines = part.value
+        .split("\n")
+        .filter((_, idx, arr) =>
+          idx < arr.length - 1 || part.value.slice(-1) !== "\n"
+            ? true
+            : idx < arr.length - 1
+        );
       for (const line of lines) {
         oldLines.push({ type: "normal", content: line });
         newLines.push({ type: "normal", content: line });

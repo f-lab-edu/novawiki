@@ -1,4 +1,4 @@
-import { SideBySideDiff } from "@/features";
+import { WikiDiffer } from "@/features";
 import { Button } from "@/components";
 import Link from "next/link";
 
@@ -35,8 +35,9 @@ export default async function Compare({
   const { id } = await params;
   const { prev = "30", next = "50" } = await searchParams;
 
-  // TODO: id와 버전으로 문서 데이터 fetch
+  // TODO : id와 버전으로 문서 데이터 fetch
   const documentTitle = "React";
+  // TODO : Prev가 Next보다 크다면 서로 값 변경 필요
   const oldText = mockVersions[Number(prev)] || mockVersions[30];
   const newText = mockVersions[Number(next)] || mockVersions[50];
 
@@ -48,31 +49,30 @@ export default async function Compare({
           &apos;{documentTitle}&apos; 문서 비교
         </h1>
         <Link href={`/d/${id}`}>
-          <Button>최신 문서로</Button>
+          <Button className="cursor-pointer">최신 문서로</Button>
         </Link>
       </div>
 
       {/* 버전 비교 */}
-      <SideBySideDiff
+      <WikiDiffer
         oldText={oldText}
         newText={newText}
-        oldVersion={`V ${prev}`}
-        newVersion={`V ${next}`}
+        oldVersion={`v${prev}`}
+        newVersion={`v${next}`}
       />
-
       {/* 버전별 액션 버튼 */}
       <div className="flex gap-4">
         <div className="flex-1">
           <Link href={`/d/${id}?v=${prev}`}>
-            <Button variant="outline" className="w-full">
-              V {prev} 버전 보기
+            <Button variant="outline" className="w-full cursor-pointer">
+              v{prev} 버전 보기
             </Button>
           </Link>
         </div>
         <div className="flex-1">
           <Link href={`/d/${id}?v=${next}`}>
-            <Button variant="outline" className="w-full">
-              V {next} 버전 보기
+            <Button variant="outline" className="w-full cursor-pointer">
+              v{next} 버전 보기
             </Button>
           </Link>
         </div>

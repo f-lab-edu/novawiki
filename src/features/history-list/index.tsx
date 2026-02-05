@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components";
 import Link from "next/link";
+import { simpleMessageToast } from "@/lib/utils/common";
 
 type HistoryItem = {
   version: number;
   date: string;
   user: string;
   action: string;
+  comment: string;
 };
 
 type HistoryListProps = {
@@ -24,21 +26,19 @@ export function HistoryList({
   history,
 }: HistoryListProps) {
   const router = useRouter();
-  const [prevVersion, setPrevVersion] = useState<number | null>(
-    history.length > 1 ? history[1].version : null
-  );
-  const [nextVersion, setNextVersion] = useState<number | null>(
-    history.length > 0 ? history[0].version : null
-  );
+  const [prevVersion, setPrevVersion] = useState<number | null>(null);
+  const [nextVersion, setNextVersion] = useState<number | null>(null);
 
   const handleCompare = () => {
     if (prevVersion !== null && nextVersion !== null) {
       router.push(`/c/${documentId}?prev=${prevVersion}&next=${nextVersion}`);
+      return;
     }
+    simpleMessageToast("선택 오류", "비교할 버전을 선택해 주세요.");
   };
 
   return (
-    <div className="w-full max-w-250 mx-auto flex flex-col gap-6">
+    <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
       {/* 상단 제목 및 버튼 */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">
@@ -46,15 +46,11 @@ export function HistoryList({
         </h1>
         <div className="flex items-center gap-2">
           <Link href={`/e/${documentId}`}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" className="cursor-pointer" size="sm">
               수정
             </Button>
           </Link>
-          <Button
-            size="sm"
-            onClick={handleCompare}
-            disabled={prevVersion === null || nextVersion === null}
-          >
+          <Button size="sm" className="cursor-pointer" onClick={handleCompare}>
             비교
           </Button>
         </div>
@@ -63,13 +59,14 @@ export function HistoryList({
       {/* 이력 테이블 */}
       <div className="rounded-lg border overflow-hidden">
         {/* 테이블 헤더 */}
-        <div className="grid grid-cols-[60px_60px_1fr_120px_120px_100px] gap-4 px-4 py-3 bg-muted/50 text-sm font-medium">
+        <div className="grid grid-cols-[60px_60px_60px_120px_120px_100px_1fr] gap-4 px-4 py-3 bg-muted/50 text-sm font-medium">
           <div className="text-center">이전</div>
           <div className="text-center">현재</div>
-          <div>버전</div>
-          <div>수정일시</div>
-          <div>사용자</div>
-          <div>작업내용</div>
+          <div className="text-center">버전</div>
+          <div className="text-center">수정일시</div>
+          <div className="text-center">사용자</div>
+          <div className="text-center">작업내용</div>
+          <div className="text-center">코멘트</div>
         </div>
 
         {/* 이력 목록 */}
@@ -77,7 +74,7 @@ export function HistoryList({
           {history.map((item) => (
             <div
               key={item.version}
-              className="grid grid-cols-[60px_60px_1fr_120px_120px_100px] gap-4 px-4 py-3 text-sm hover:bg-muted/30 transition-colors"
+              className="grid grid-cols-[60px_60px_60px_120px_120px_100px_1fr] gap-4 px-4 py-3 text-sm hover:bg-muted/30 transition-colors"
             >
               <div className="flex justify-center">
                 <input
@@ -97,10 +94,17 @@ export function HistoryList({
                   className="size-4 cursor-pointer"
                 />
               </div>
-              <div className="font-medium">v{item.version}</div>
-              <div className="text-muted-foreground">{item.date}</div>
-              <div>{item.user}</div>
-              <div className="text-muted-foreground">{item.action}</div>
+              <div className="font-medium text-center">v{item.version}</div>
+              <div className="text-muted-foreground text-center">
+                {item.date}
+              </div>
+              <div className="text-center">{item.user}</div>
+              <div className="text-muted-foreground text-center">
+                {item.action}
+              </div>
+              <div className="text-muted-foreground text-center">
+                {item.comment}
+              </div>
             </div>
           ))}
         </div>

@@ -6,7 +6,7 @@ export { SignUpForm } from "./signup-form";
 
 // Wiki
 export { WikiDiffViewer } from "./wiki-differ";
-export { SideBySideDiff } from "./wiki-differ/SideBySideDiff";
+export { WikiDiffer } from "./wiki-differ/WikiDiffer";
 export { WikiEditor } from "./wiki-editor";
 export { WikiViewer } from "./wiki-viewer";
 

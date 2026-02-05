@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { SearchResultSection } from "@/features";
 
 const mockTitleResults = [
@@ -40,30 +39,28 @@ export default async function Search({
   const titleResults = query ? mockTitleResults : [];
   const contentResults = query ? mockContentResults : [];
   return (
-    <Suspense fallback={<div className="text-center py-20">로딩중...</div>}>
-      <div className="w-full max-w-250 mx-auto flex flex-col gap-10">
-        {query && (
-          <div className="flex flex-col gap-10">
-            <SearchResultSection
-              title={`'${query}'에 대한 문서명 검색 결과`}
-              results={titleResults}
-              searchQuery={query}
-            />
+    <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
+      {query && (
+        <div className="flex flex-col gap-10">
+          <SearchResultSection
+            title={`'${query}'에 대한 문서명 검색 결과`}
+            results={titleResults}
+            searchQuery={query}
+          />
 
-            <SearchResultSection
-              title={`'${query}'에 대한 문서내용 검색 결과`}
-              results={contentResults}
-              searchQuery={query}
-            />
-          </div>
-        )}
+          <SearchResultSection
+            title={`'${query}'에 대한 문서내용 검색 결과`}
+            results={contentResults}
+            searchQuery={query}
+          />
+        </div>
+      )}
 
-        {!query && (
-          <div className="text-center text-muted-foreground py-20">
-            검색어를 입력하세요
-          </div>
-        )}
-      </div>
-    </Suspense>
+      {!query && (
+        <div className="text-center text-muted-foreground py-20">
+          검색어를 입력하세요
+        </div>
+      )}
+    </div>
   );
 }
