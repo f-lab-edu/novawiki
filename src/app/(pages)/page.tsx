@@ -42,7 +42,25 @@ const mockRecent = [
   { title: "서울특별시", time: "6시간 전" },
 ];
 
-export default function Home() {
+async function getPopDocs() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/document/popular`, { next: { revalidate: 60 } });
+  if (!res.ok) throw new Error("Failed to fetch popular docs");
+  return res.json();
+}
+
+async function getRecentDocs() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/document/recent`, { next: { revalidate: 60 } });
+  if (!res.ok) throw new Error("Failed to fetch popular docs");
+  return res.json();
+}
+
+export default async function Home() {
+
+  const [popDocs, recentDocs] = await Promise.all([
+    getPopDocs(),
+    getRecentDocs(),
+  ]);
+
   return (
     <div className="w-300 flex flex-col items-center gap-10">
       <div className="w-full">
@@ -53,7 +71,7 @@ export default function Home() {
         <div className="col-span-2">
           <h2 className="text-xl font-bold mb-4!">오늘의 인기 문서</h2>
           <div className="flex flex-col gap-3">
-            {mockPopular.map((doc, i) => (
+            {popDocs.map((doc, i) => (
               <HomeCard key={`${i}${doc.title}pop`} index={i} doc={doc} />
             ))}
           </div>
@@ -63,7 +81,7 @@ export default function Home() {
         <div className="col-span-1">
           <h2 className="text-xl font-bold mb-4!">최근 수정 문서</h2>
           <div className="rounded-lg border divide-y">
-            {mockRecent.map((doc, i) => (
+            {recentDocs.map((doc, i) => (
               <HomeRecentCard key={`${i}${doc.title}rec`} index={i} doc={doc} />
             ))}
           </div>
