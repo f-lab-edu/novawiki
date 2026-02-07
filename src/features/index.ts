@@ -22,3 +22,6 @@ export { SearchResultSection } from "./search-result-section";
 
 // History
 export { HistoryList } from "./history-list";
+
+// Document
+export { DocumentControls } from "./document-controls";
