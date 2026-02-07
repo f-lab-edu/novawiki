@@ -1,6 +1,5 @@
-import { Button } from "@/components";
 import { DocumentType } from "@/entities";
-import { WikiViewer } from "@/features";
+import { DocumentControls, WikiViewer } from "@/features";
 import { parseHeads } from "@/lib/utils/common";
 import Link from "next/link";
 
@@ -25,36 +24,13 @@ export default async function Document({
   if (!doc) {
     return <div>존재하지 않는 문서입니다.</div>;
   }
-
   // 목차 파싱
   const indexList = parseHeads(doc.content);
 
   return (
     <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
       {/* 제목, 문서정보, 버튼박스 */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">{doc.title}</h1>
-          <div className="flex items-center gap-2">
-            <Link href={`/e/${id}`}>
-              <Button variant="outline" size="sm">
-                수정
-              </Button>
-            </Link>
-            <Button variant="outline" size="sm">
-              삭제
-            </Button>
-            <Link href={`/h/${id}`}>
-              <Button variant="outline" size="sm">
-                역사
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="text-sm text-muted-foreground">
-          최종 수정: {doc.updated_at}
-        </div>
-      </div>
+      <DocumentControls doc={doc} />
 
       {/* 문서 내용 + 목차 */}
       <div className="flex gap-6">
