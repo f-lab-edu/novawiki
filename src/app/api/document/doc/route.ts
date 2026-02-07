@@ -1,20 +1,25 @@
 import { createClient } from "@/lib/supabase/server";
+import { tanslatePrimaryTitle } from "@/lib/utils/common";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  // 문서 조회
   const supabase = await createClient();
   const query = supabase
     .from("document")
     .select(
       `*,
       user:document_user_id_fkey (
-      email,
       nick
     )
   `
     )
+    .eq("primaryTitle", tanslatePrimaryTitle(id))
     .eq("isBlock", false)
     .eq("isDisplay", true)
-    .limit(10);
+    .single();
 
   const { data, error } = await query;
   if (error) {

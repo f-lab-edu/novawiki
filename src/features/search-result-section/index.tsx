@@ -3,16 +3,11 @@
 import { Button } from "@/components";
 import { SearchResultCard } from "../search-result-card";
 import Link from "next/link";
-
-type SearchDoc = {
-  id: string;
-  title: string;
-  summary: string;
-};
+import { DocumentType } from "@/entities";
 
 type SearchResultSectionProps = {
   title: string;
-  results: SearchDoc[];
+  results: DocumentType[];
   hasMore?: boolean;
   onLoadMore?: () => void;
   searchQuery: string;

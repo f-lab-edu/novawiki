@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components";
+import { DocumentType } from "@/entities";
+import { extractContentPreview } from "@/lib/utils/common";
 
 type SearchResultCardProps = {
-  doc: {
-    id: string;
-    title: string;
-    summary: string;
-  };
+  doc: DocumentType;
 };
 
 export function SearchResultCard({ doc }: SearchResultCardProps) {
@@ -19,7 +17,9 @@ export function SearchResultCard({ doc }: SearchResultCardProps) {
         className="flex flex-col gap-2 cursor-pointer"
       >
         <span className="font-medium">{doc.title}</span>
-        <span className="text-muted-foreground">{doc.summary}</span>
+        <span className="text-muted-foreground">
+          {extractContentPreview(doc.content)}
+        </span>
       </Link>
       <div className="flex items-center gap-2 ml-4 shrink-0">
         <Link href={`/e/${doc.id}`}>
