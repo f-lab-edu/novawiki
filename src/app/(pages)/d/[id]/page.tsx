@@ -1,15 +1,12 @@
 import { DocumentType } from "@/entities";
 import { DocumentControls, WikiViewer } from "@/features";
 import { parseHeads } from "@/lib/utils/common";
+import { fetcher } from "@/lib/utils/fetcher";
 import Link from "next/link";
 
 async function getDoc(id: string): Promise<DocumentType> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/document/doc?id=${id}`,
-    { next: { revalidate: 60 } }
-  );
-  if (!res.ok) throw new Error("Failed to fetch doc");
-  return res.json();
+  const data = await fetcher(`/api/document/doc?id=${id}`);
+  return data;
 }
 
 export default async function Document({
@@ -28,7 +25,7 @@ export default async function Document({
   const indexList = parseHeads(doc.content);
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
+    <div className="w-full max-w-300 mx-auto flex flex-col gap-6 relative">
       {/* 제목, 문서정보, 버튼박스 */}
       <DocumentControls doc={doc} />
 
@@ -40,7 +37,7 @@ export default async function Document({
         </div>
 
         {/* 목차 사이드바 */}
-        <nav className="w-40 shrink-0">
+        <nav className="w-50 shrink-0 absolute -right-60">
           <div className="sticky top-6 rounded-lg border p-4">
             <h3 className="font-semibold mb-3">목차</h3>
             <ol className="flex flex-col gap-2 text-sm text-muted-foreground">

@@ -1,13 +1,10 @@
 import { DocumentType } from "@/entities";
 import { WikiEditForm } from "@/features";
+import { fetcher } from "@/lib/utils/fetcher";
 
 async function getDoc(id: string): Promise<DocumentType> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/document/doc?id=${id}`,
-    { next: { revalidate: 60 } }
-  );
-  if (!res.ok) throw new Error("Failed to fetch doc");
-  return res.json();
+  const data = await fetcher(`/api/document/doc?id=${id}`);
+  return data;
 }
 
 export default async function Edit({
@@ -27,11 +24,6 @@ export default async function Edit({
   const content = isNew ? "" : doc.content;
 
   return (
-    <WikiEditForm
-      documentId={id}
-      initialTitle={title}
-      initialContent={content}
-      isNew={isNew}
-    />
+    <WikiEditForm initialTitle={title} initialContent={content} isNew={isNew} />
   );
 }
