@@ -1,15 +1,12 @@
 import { DocumentType } from "@/entities";
 import { SearchResultSection } from "@/features";
+import { fetcher } from "@/lib/utils/fetcher";
 
 async function getSearchDocs(
   q: string
 ): Promise<[DocumentType[], DocumentType[]]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/document/search?q=${q}`,
-    { next: { revalidate: 60 } }
-  );
-  if (!res.ok) throw new Error("Failed to fetch search docs");
-  return res.json();
+  const data = await fetcher(`/api/document/search?q=${q}`);
+  return data;
 }
 
 export default async function Search({
@@ -21,8 +18,8 @@ export default async function Search({
   const [titleDocs, contentDocs] = await getSearchDocs(q || "");
 
   // query 로 검색 API 요청
-  const titleResults = q ? titleDocs : ([] as DocumentType[]);
-  const contentResults = q ? contentDocs : ([] as DocumentType[]);
+  const titleResults = titleDocs ? titleDocs : ([] as DocumentType[]);
+  const contentResults = contentDocs ? contentDocs : ([] as DocumentType[]);
   return (
     <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
       {q && (
