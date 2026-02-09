@@ -5,8 +5,7 @@ export { LoginForm } from "./login-form";
 export { SignUpForm } from "./signup-form";
 
 // Wiki
-export { WikiDiffViewer } from "./wiki-differ";
-export { WikiDiffer } from "./wiki-differ/WikiDiffer";
+export { WikiDiffer } from "./wiki-differ";
 export { WikiEditForm } from "./wiki-edit-form";
 export { WikiEditor } from "./wiki-editor";
 export { WikiViewer } from "./wiki-viewer";
