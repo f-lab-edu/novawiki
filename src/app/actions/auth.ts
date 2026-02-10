@@ -1,7 +1,6 @@
 "use server";
 
 import { createAdminClient, createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
 type AuthState = {
   error: string | null;
@@ -86,7 +85,7 @@ export async function signUp(
     }
   }
 
-  redirect("/");
+  return { error: null, success: true, id: data.user?.id };
 }
 
 /** 로그아웃 */
