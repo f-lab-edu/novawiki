@@ -1,7 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 
 export async function GET() {
-  const supabase = await createClient();
+  // 작성자 정보가 필요 없으므로 adminClient 사용하지 않음
+  const supabase = createAdminClient();
   const query = supabase
     .from("document")
     .select(`*`)

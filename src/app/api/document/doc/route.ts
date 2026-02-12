@@ -9,13 +9,7 @@ export async function GET(req: Request) {
   const supabase = await createClient();
   const query = supabase
     .from("document")
-    .select(
-      `*,
-      user:document_user_id_fkey (
-      nick
-    )
-  `,
-    )
+    .select("*")
     .eq("primaryTitle", tanslatePrimaryTitle(id))
     .eq("isBlock", false)
     .eq("isDisplay", true)
