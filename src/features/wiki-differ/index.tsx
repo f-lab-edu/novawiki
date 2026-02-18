@@ -1,43 +1,15 @@
 "use client";
 
-import { diffLines, diffWords } from "diff";
+import { diffLines } from "diff";
 import type React from "react";
 import { useMemo } from "react";
+import { WordHighlight } from "./components/WordHighlight";
 
 type DiffLine = {
   type: "added" | "removed" | "normal" | "modified";
   content: string;
   highlightedContent?: React.ReactNode;
 };
-
-function highlightChanges(
-  oldLine: string,
-  newLine: string,
-  side: "old" | "new",
-): React.ReactNode {
-  const wordDiff = diffWords(oldLine, newLine);
-
-  return wordDiff.map((part, i) => {
-    if (side === "old" && part.removed) {
-      return (
-        <span key={i} className="bg-red-200 dark:bg-red-900/50">
-          {part.value}
-        </span>
-      );
-    }
-    if (side === "new" && part.added) {
-      return (
-        <span key={i} className="bg-green-200 dark:bg-green-900/50">
-          {part.value}
-        </span>
-      );
-    }
-    if (!part.added && !part.removed) {
-      return <span key={i}>{part.value}</span>;
-    }
-    return null;
-  });
-}
 
 export function WikiDiffer({
   oldText,
@@ -67,19 +39,23 @@ export function WikiDiffer({
         oldLines.push({
           type: "modified",
           content: removedContent,
-          highlightedContent: highlightChanges(
-            removedContent,
-            addedContent,
-            "old",
+          highlightedContent: (
+            <WordHighlight
+              oldLine={removedContent}
+              newLine={addedContent}
+              side="old"
+            />
           ),
         });
         newLines.push({
           type: "modified",
           content: addedContent,
-          highlightedContent: highlightChanges(
-            removedContent,
-            addedContent,
-            "new",
+          highlightedContent: (
+            <WordHighlight
+              oldLine={removedContent}
+              newLine={addedContent}
+              side="new"
+            />
           ),
         });
 
@@ -134,7 +110,7 @@ export function WikiDiffer({
               const line = oldLines[idx] || { type: "normal", content: "" };
               return (
                 <div
-                  key={idx}
+                  key={`${oldVersion}-${idx}-${line.highlightedContent}`}
                   className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
                     line.type === "removed" || line.type === "modified"
                       ? "bg-red-50 dark:bg-red-950/30"
@@ -160,7 +136,7 @@ export function WikiDiffer({
               const line = newLines[idx] || { type: "normal", content: "" };
               return (
                 <div
-                  key={idx}
+                  key={`${newVersion}-${idx}-${line.highlightedContent}`}
                   className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
                     line.type === "added" || line.type === "modified"
                       ? "bg-green-50 dark:bg-green-950/30"
