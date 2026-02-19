@@ -3,7 +3,7 @@
 import { diffLines } from "diff";
 import { useMemo } from "react";
 import { WordHighlight } from "./components/WordHighlight";
-import { DiffLine } from "./model/types";
+import { DiffLineType } from "./model/types";
 
 export function WikiDiffer({
   oldText,
@@ -19,8 +19,8 @@ export function WikiDiffer({
   const { oldLines, newLines, maxLines } = useMemo(() => {
     const lineDiff = diffLines(oldText, newText);
 
-    const oldLines: DiffLine[] = [];
-    const newLines: DiffLine[] = [];
+    const oldLines: DiffLineType[] = [];
+    const newLines: DiffLineType[] = [];
 
     let i = 0;
     while (i < lineDiff.length) {
@@ -85,9 +85,7 @@ export function WikiDiffer({
 
       i++;
     }
-
     const maxLines = Math.max(oldLines.length, newLines.length);
-
     return { oldLines, newLines, maxLines };
   }, [oldText, newText]);
 
