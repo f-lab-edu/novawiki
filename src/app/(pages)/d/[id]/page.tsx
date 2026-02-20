@@ -8,13 +8,16 @@ async function getDoc(id: string): Promise<ApiResponse<DocumentType>> {
   return fetcher(`/api/document/doc?id=${id}`);
 }
 
-async function getHistoryDoc(id: string, v: string): Promise<ApiResponse<DocumentType>> {
+async function getHistoryDoc(
+  id: string,
+  v: string,
+): Promise<ApiResponse<DocumentType>> {
   return fetcher(`/api/document/version?id=${id}&v=${v}`);
 }
 
 export default async function Document({
   params,
-  searchParams
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ v?: string }>;
@@ -23,7 +26,7 @@ export default async function Document({
   const { v } = await searchParams;
 
   // 버전으로 과거 데이터 혹은 미래 데이터(존재하지 않음)을 보려고 할 떄
-  const isOld = !!v
+  const isOld = !!v;
 
   const { data } = isOld ? await getHistoryDoc(id, v) : await getDoc(id);
   if (!data) {

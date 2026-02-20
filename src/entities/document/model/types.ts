@@ -14,5 +14,5 @@ export type DocumentType = {
   };
   document?: {
     title: string;
-  }
+  };
 };

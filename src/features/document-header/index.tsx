@@ -35,11 +35,11 @@ export function DocumentHeader({ doc, isOld }: DocumentHeaderProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{
-          isOld ? doc.document?.title : doc.title
-        }</h1>
-        {
-          !isOld ? <div className="flex items-center gap-2">
+        <h1 className="text-3xl font-bold">
+          {isOld ? doc.document?.title : doc.title}
+        </h1>
+        {!isOld ? (
+          <div className="flex items-center gap-2">
             {/* 수정 */}
             <Button
               variant="outline"
@@ -65,16 +65,17 @@ export function DocumentHeader({ doc, isOld }: DocumentHeaderProps) {
               </Button>
             </Link>
           </div>
-            : <></>
-        }
+        ) : (
+          <></>
+        )}
       </div>
-      {
-        !isOld ?
-          <div className="text-sm text-muted-foreground">
-            최종 수정: {formatDateTime(doc.updated_at)}
-          </div>
-          : <></>
-      }
+      {!isOld ? (
+        <div className="text-sm text-muted-foreground">
+          최종 수정: {formatDateTime(doc.updated_at)}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
