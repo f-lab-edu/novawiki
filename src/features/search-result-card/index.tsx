@@ -13,7 +13,7 @@ export function SearchResultCard({ doc }: SearchResultCardProps) {
   return (
     <div className="flex items-center justify-between rounded-lg border p-8 hover:bg-muted/50 transition-colors">
       <Link
-        href={`/d/${doc.id}`}
+        href={`/d/${doc.title}`}
         className="flex flex-col gap-2 cursor-pointer"
       >
         <span className="font-medium">{doc.title}</span>

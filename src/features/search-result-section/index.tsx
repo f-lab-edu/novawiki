@@ -10,14 +10,16 @@ type SearchResultSectionProps = {
   results: DocumentType[];
   hasMore?: boolean;
   onLoadMore?: () => void;
+  isLoading?: boolean;
   searchQuery: string;
 };
 
 export function SearchResultSection({
   title,
   results,
-  hasMore = true,
+  hasMore = false,
   onLoadMore,
+  isLoading = false,
   searchQuery,
 }: SearchResultSectionProps) {
   const isEmpty = results.length === 0;
@@ -46,8 +48,9 @@ export function SearchResultSection({
                 variant="outline"
                 className="w-full cursor-pointer"
                 onClick={onLoadMore}
+                disabled={isLoading}
               >
-                더 보기
+                {isLoading ? "불러오는 중..." : "더 보기"}
               </Button>
             )}
           </div>
