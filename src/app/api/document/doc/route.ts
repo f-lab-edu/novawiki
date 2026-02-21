@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { tanslatePrimaryTitle } from "@/lib/utils/common";
 
 export async function GET(req: Request) {
@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const id = searchParams.get("id");
 
   // 문서 조회
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const query = supabase
     .from("document")
     .select("*")
