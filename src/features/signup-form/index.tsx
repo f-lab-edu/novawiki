@@ -1,13 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { signUp } from "@/app/actions/auth";
-import { startTransition, useActionState, useEffect, useState } from "react";
-import {
-  validateNick,
-  validatePassword,
-  validatePasswordChk,
-  validateUserid,
-} from "./utils/validate";
 import {
   Button,
   Card,
@@ -18,6 +13,13 @@ import {
   Input,
 } from "@/components";
 import { simpleMessageToast } from "@/lib/utils/common";
+import { useUserStore } from "@/store/useUserStore";
+import {
+  validateNick,
+  validatePassword,
+  validatePasswordChk,
+  validateUserid,
+} from "./utils/validate";
 
 export function SignUpForm() {
   // 아이디
@@ -37,13 +39,8 @@ export function SignUpForm() {
   const [nickError, setNickError] = useState<string>("");
   const [isValidNick, setIsValidNick] = useState<boolean>(false);
 
-  // FormAcfion
-  const [state, formAction] = useActionState(signUp, { error: null });
-
-  useEffect(() => {
-    if (!state.error) return;
-    simpleMessageToast(state.error, `${new Date()}`);
-  }, [state]);
+  const router = useRouter();
+  const { setUser } = useUserStore();
 
   // 아이디
   const handleUseridChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,40 +83,41 @@ export function SignUpForm() {
     setIsValidNick(isValid);
   };
 
-  // 폼 저장
-  const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleAction = async (formData: FormData) => {
     if (!isValidUserid) {
-      simpleMessageToast("유효하지 않은 아이디입니다.", `${new Date()}`);
+      simpleMessageToast("회원가입 오류", "유효하지 않은 아이디입니다.");
       return;
     }
 
     if (!isValidPassword) {
-      simpleMessageToast("유효하지 않은 비밀번호입니다.", `${new Date()}`);
+      simpleMessageToast("회원가입 오류", "유효하지 않은 비밀번호입니다.");
       return;
     }
 
     if (!isValidPasswordChk) {
-      simpleMessageToast("비밀번호가 일치하지 않습니다.", `${new Date()}`);
+      simpleMessageToast("회원가입 오류", "비밀번호가 일치하지 않습니다.");
       return;
     }
 
     if (!isValidNick) {
-      simpleMessageToast("유효하지 않은 닉네임입니다.", `${new Date()}`);
+      simpleMessageToast("회원가입 오류", "유효하지 않은 닉네임입니다.");
       return;
     }
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    startTransition(() => {
-      formAction(formData);
-    });
+    const result = await signUp({ error: null }, formData);
+    if (result.error) {
+      simpleMessageToast("회원가입 오류", result.error);
+      return;
+    }
+    if (result.success && result.id) {
+      setUser({ id: result.id });
+      router.push("/");
+    }
   };
 
   return (
     <Card className="p-7 pt-10 pb-10">
-      <form action={formAction} className="w-100" onSubmit={handleSignUpSubmit}>
+      <form action={handleAction} className="w-100">
         <FieldGroup>
           <Field data-invalid={!!useridError}>
             <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>

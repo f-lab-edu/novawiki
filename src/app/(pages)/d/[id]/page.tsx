@@ -1,38 +1,60 @@
-import { Button } from "@/components";
-import { WikiViewer } from "@/features";
+import Link from "next/link";
+import type { DocumentType } from "@/entities";
+import { DocumentControls, WikiViewer } from "@/features";
+import { parseHeads } from "@/lib/utils/common";
+import { fetcher } from "@/lib/utils/fetcher";
 
-export default function Document() {
+async function getDoc(id: string): Promise<DocumentType> {
+  const data = await fetcher(`/api/document/doc?id=${id}`);
+  return data;
+}
+
+export default async function Document({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  // 문서 가져오기
+  const doc = await getDoc(id);
+
+  if (!doc) {
+    return <div>존재하지 않는 문서입니다.</div>;
+  }
+  // 목차 파싱
+  const indexList = parseHeads(doc.content);
+
   return (
-    <div>
+    <div className="w-full max-w-300 mx-auto flex flex-col gap-6 relative">
       {/* 제목, 문서정보, 버튼박스 */}
-      <div>
-        <div>
-          <h1>문서제목</h1>
-          <div>
-            <Button>수정</Button>
-            <Button>삭제</Button>
-            <Button>역사</Button>
+      <DocumentControls doc={doc} />
+
+      {/* 문서 내용 + 목차 */}
+      <div className="flex gap-6">
+        {/* 본문 영역 */}
+        <div className="flex-1 min-w-0">
+          <WikiViewer content={doc.content} />
+        </div>
+
+        {/* 목차 사이드바 */}
+        <nav className="w-50 shrink-0 absolute -right-60">
+          <div className="sticky top-6 rounded-lg border p-4">
+            <h3 className="font-semibold mb-3">목차</h3>
+            <ol className="flex flex-col gap-2 text-sm text-muted-foreground">
+              {indexList.map((item, index) => (
+                <li key={item.title}>
+                  <Link
+                    href={`#${item.title}`}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {index + 1}. {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ol>
           </div>
-        </div>
-        <div>
-          <div>최종수정 : 2026-01-01</div>
-        </div>
+        </nav>
       </div>
-      {/* 문서 내용 */}
-      <div>
-        <div>
-          <WikiViewer content="# 테스트 제목" />
-        </div>
-      </div>
-      {/* 목차 */}
-      <nav>
-        <h3>목차</h3>
-        <ol>
-          <li>개요</li>
-          <li>사건사고</li>
-          <li>여담</li>
-        </ol>
-      </nav>
     </div>
   );
 }

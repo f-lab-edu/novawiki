@@ -1,12 +1,29 @@
-import { WikiEditor } from "@/features";
+import type { DocumentType } from "@/entities";
+import { WikiEditForm } from "@/features";
+import { fetcher } from "@/lib/utils/fetcher";
 
-export default function Edit() {
+async function getDoc(id: string): Promise<DocumentType> {
+  const data = await fetcher(`/api/document/doc?id=${id}`);
+  return data;
+}
+
+export default async function Edit({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  // 문서 가져오기
+  const doc = await getDoc(id);
+
+  // 새 문서로 작성할지 확인
+  const isNew = id === "new" || !doc;
+
+  // TODO: id로 문서 데이터 fetch (신규면 빈 값)
+  const title = isNew ? "" : doc.title;
+  const content = isNew ? "" : doc.content;
+
   return (
-    <div>
-      <div>
-        <input type="text" placeholder="문서 제목 입력" />
-      </div>
-      <WikiEditor content="" />
-    </div>
+    <WikiEditForm initialTitle={title} initialContent={content} isNew={isNew} />
   );
 }

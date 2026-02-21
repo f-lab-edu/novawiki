@@ -1,4 +1,10 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components";
 
 export function HomeCarousel() {
   return (
@@ -172,5 +178,5 @@ export function HomeCarousel() {
       <CarouselPrevious className="absolute left-3 top-1/2 -translate-y-1/2" />
       <CarouselNext className="absolute right-3 top-1/2 -translate-y-1/2" />
     </Carousel>
-  )
+  );
 }

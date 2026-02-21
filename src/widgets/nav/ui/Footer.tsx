@@ -12,7 +12,9 @@ export function Footer() {
             <Link href="/service">고객센터</Link>
           </div>
         </div>
-        <div className="text-sm flex w-full">ⓒ 2026 NOVAWIKI. All rights reserved.</div>
+        <div className="text-sm flex w-full">
+          ⓒ 2026 NOVAWIKI. All rights reserved.
+        </div>
       </div>
     </footer>
   );

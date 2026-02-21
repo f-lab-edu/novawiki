@@ -39,11 +39,10 @@ export function validatePassword(password: string): [boolean, string] {
 
   // 영어 소문자, 숫자, 특수문자 포함 필수 검증 정규식
   const PASSWORD_REGEX =
-    /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+    /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
 
   // 영어, 숫자, 특수문자 외 다른 문자 포함되어있는 지 검증
-  const IMP_PASSWORD_REGEX =
-    /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
+  const IMP_PASSWORD_REGEX = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
 
   if (!PASSWORD_REGEX.test(password)) {
     const isValid = false;
@@ -68,7 +67,7 @@ export function validatePassword(password: string): [boolean, string] {
  */
 export function validatePasswordChk(
   password: string,
-  passwordChk: string
+  passwordChk: string,
 ): [boolean, string] {
   if (password !== passwordChk) {
     const isValid = false;

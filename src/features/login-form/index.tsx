@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { login } from "@/app/actions/auth";
 import { Button, Card } from "@/components";
 import {
@@ -9,13 +11,19 @@ import {
   FieldLabel,
 } from "@/components/ui/shadcn/field";
 import { Input } from "@/components/ui/shadcn/input";
-import { useActionState, useState } from "react";
+import { useUserStore } from "@/store/useUserStore";
 
 export function LoginForm() {
+  const router = useRouter();
+  const { setUser } = useUserStore();
+
   // 아이디
   const [userid, setUserid] = useState<string>("");
   // 비밀번호
   const [password, setPassword] = useState<string>("");
+
+  // 에러
+  const [error, setError] = useState<string | null>(null);
 
   // 아이디
   const handleUseridChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,11 +37,21 @@ export function LoginForm() {
     setPassword(value);
   };
 
-  const [state, formAction] = useActionState(login, { error: null });
+  const handleAction = async (formData: FormData) => {
+    const result = await login({ error: null }, formData);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+    if (result.success && result.id) {
+      setUser({ id: result.id });
+      router.push("/");
+    }
+  };
 
   return (
     <Card className="p-7 pt-10 pb-10">
-      <form action={formAction} className="w-100">
+      <form action={handleAction} className="w-100">
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="input-field-userid">아이디</FieldLabel>
@@ -57,9 +75,7 @@ export function LoginForm() {
               onChange={handlePasswordChange}
             />
           </Field>
-          <FieldDescription className="text-red-500">
-            {state.error}
-          </FieldDescription>
+          <FieldDescription className="text-red-500">{error}</FieldDescription>
           <Button type="submit" className="w-full cursor-pointer">
             로그인
           </Button>

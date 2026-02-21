@@ -1,108 +1,179 @@
 "use client";
 
-import "./style/diff.css";
-import React, { useEffect } from "react";
 import { diffLines, diffWords } from "diff";
-import { useToastStore } from "@/store/useToastStore";
+import type React from "react";
+import { useMemo } from "react";
 
-function highlightWordDiff(
+type DiffLine = {
+  type: "added" | "removed" | "normal" | "modified";
+  content: string;
+  highlightedContent?: React.ReactNode;
+};
+
+function highlightChanges(
   oldLine: string,
-  newLine: string
-): React.ReactNode[] {
+  newLine: string,
+  side: "old" | "new",
+): React.ReactNode {
   const wordDiff = diffWords(oldLine, newLine);
 
   return wordDiff.map((part, i) => {
-    if (part.added) {
+    if (side === "old" && part.removed) {
       return (
-        <span key={i} className="diff-word-added">
+        <span key={i} className="bg-red-200 dark:bg-red-900/50">
           {part.value}
         </span>
       );
     }
-    if (part.removed) {
+    if (side === "new" && part.added) {
       return (
-        <span key={i} className="diff-word-removed">
+        <span key={i} className="bg-green-200 dark:bg-green-900/50">
           {part.value}
         </span>
       );
     }
-    return <span key={i}>{part.value}</span>;
+    if (!part.added && !part.removed) {
+      return <span key={i}>{part.value}</span>;
+    }
+    return null;
   });
 }
 
-export function WikiDiffViewer({
+export function WikiDiffer({
   oldText,
   newText,
+  oldVersion,
+  newVersion,
 }: {
   oldText: string;
   newText: string;
+  oldVersion: string;
+  newVersion: string;
 }) {
-  const lineDiff = diffLines(oldText, newText);
+  const { oldLines, newLines, maxLines } = useMemo(() => {
+    const lineDiff = diffLines(oldText, newText);
 
-  const rows = [];
-  let i = 0;
+    const oldLines: DiffLine[] = [];
+    const newLines: DiffLine[] = [];
 
-  while (i < lineDiff.length) {
-    const part = lineDiff[i];
+    let i = 0;
+    while (i < lineDiff.length) {
+      const part = lineDiff[i];
 
-    // 변경된 줄 쌍 (삭제 후 추가)
-    if (part.removed && i + 1 < lineDiff.length && lineDiff[i + 1].added) {
-      const removedLine = part.value;
-      const addedLine = lineDiff[i + 1].value;
+      if (part.removed && i + 1 < lineDiff.length && lineDiff[i + 1].added) {
+        const removedContent = part.value.replace(/\n$/, "");
+        const addedContent = lineDiff[i + 1].value.replace(/\n$/, "");
 
-      rows.push(
-        <div key={i} className="diff-line removed">
-          {highlightWordDiff(removedLine, addedLine)}
-        </div>
-      );
+        oldLines.push({
+          type: "modified",
+          content: removedContent,
+          highlightedContent: highlightChanges(
+            removedContent,
+            addedContent,
+            "old",
+          ),
+        });
+        newLines.push({
+          type: "modified",
+          content: addedContent,
+          highlightedContent: highlightChanges(
+            removedContent,
+            addedContent,
+            "new",
+          ),
+        });
 
-      rows.push(
-        <div key={i + 1} className="diff-line added">
-          {highlightWordDiff(removedLine, addedLine)}
-        </div>
-      );
+        i += 2;
+        continue;
+      }
 
-      i += 2;
-      continue;
+      if (part.added) {
+        oldLines.push({ type: "normal", content: "" });
+        newLines.push({
+          type: "added",
+          content: part.value.replace(/\n$/, ""),
+        });
+      } else if (part.removed) {
+        oldLines.push({
+          type: "removed",
+          content: part.value.replace(/\n$/, ""),
+        });
+        newLines.push({ type: "normal", content: "" });
+      } else {
+        const lines = part.value
+          .split("\n")
+          .filter((_, idx, arr) =>
+            idx < arr.length - 1 || part.value.slice(-1) !== "\n"
+              ? true
+              : idx < arr.length - 1,
+          );
+        for (const line of lines) {
+          oldLines.push({ type: "normal", content: line });
+          newLines.push({ type: "normal", content: line });
+        }
+      }
+
+      i++;
     }
 
-    if (part.added) {
-      rows.push(
-        <div key={i} className="diff-line added">
-          {part.value}
-        </div>
-      );
-    } else if (part.removed) {
-      rows.push(
-        <div key={i} className="diff-line removed">
-          {part.value}
-        </div>
-      );
-    } else {
-      rows.push(
-        <div key={i} className="diff-line normal">
-          {part.value}
-        </div>
-      );
-    }
+    const maxLines = Math.max(oldLines.length, newLines.length);
 
-    i++;
-  }
-
-  const { addToast } = useToastStore();
-  useEffect(() => {
-    addToast("저장되었습니다", "error");
-    addToast("저장되었습니다", "success");
-    addToast("저장되었습니다", "success");
-  }, [addToast]);
+    return { oldLines, newLines, maxLines };
+  }, [oldText, newText]);
 
   return (
-    <div
-      className="wiki-diff"
-      onClick={() => addToast("저장되었습니다", "success")}
-    >
-      {" "}
-      {rows}
+    <div className="flex gap-4">
+      {/* 이전 버전 */}
+      <div className="flex-1 min-w-0">
+        <div className="rounded-lg border overflow-hidden">
+          <div className="bg-muted/50 px-4 py-2 font-medium border-b">
+            {oldVersion}
+          </div>
+          <div className="font-mono text-sm">
+            {Array.from({ length: maxLines }).map((_, idx) => {
+              const line = oldLines[idx] || { type: "normal", content: "" };
+              return (
+                <div
+                  key={idx}
+                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
+                    line.type === "removed" || line.type === "modified"
+                      ? "bg-red-50 dark:bg-red-950/30"
+                      : ""
+                  }`}
+                >
+                  {line.highlightedContent || line.content || "\u00A0"}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* 현재 버전 */}
+      <div className="flex-1 min-w-0">
+        <div className="rounded-lg border overflow-hidden">
+          <div className="bg-muted/50 px-4 py-2 font-medium border-b">
+            {newVersion}
+          </div>
+          <div className="font-mono text-sm">
+            {Array.from({ length: maxLines }).map((_, idx) => {
+              const line = newLines[idx] || { type: "normal", content: "" };
+              return (
+                <div
+                  key={idx}
+                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
+                    line.type === "added" || line.type === "modified"
+                      ? "bg-green-50 dark:bg-green-950/30"
+                      : ""
+                  }`}
+                >
+                  {line.highlightedContent || line.content || "\u00A0"}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

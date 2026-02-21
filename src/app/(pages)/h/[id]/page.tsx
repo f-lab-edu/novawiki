@@ -1,38 +1,59 @@
+import { HistoryList } from "@/features";
 
-export default function History() {
+const mockHistory = [
+  {
+    version: 5,
+    date: "2026-01-26",
+    user: "사용자A",
+    action: "수정",
+    comment: "테스트용 문서입니다",
+  },
+  {
+    version: 4,
+    date: "2026-01-25",
+    user: "사용자B",
+    action: "수정",
+    comment: "테스트용 문서입니다",
+  },
+  {
+    version: 3,
+    date: "2026-01-24",
+    user: "사용자A",
+    action: "수정",
+    comment: "테스트용 문서입니다",
+  },
+  {
+    version: 2,
+    date: "2026-01-23",
+    user: "사용자C",
+    action: "수정",
+    comment: "테스트용 문서입니다",
+  },
+  {
+    version: 1,
+    date: "2026-01-22",
+    user: "사용자A",
+    action: "생성",
+    comment: "테스트용 문서입니다",
+  },
+];
+
+export default async function History({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  // TODO: id로 문서 이력 데이터 fetch
+  const documentTitle = "React";
+  const history = mockHistory;
+
   return (
-    <div>
-      {/* 상단 검색 정보 및 버튼 박스 */}
-      <div>
-        <div>
-          <h1>&apos;문서명&apos;에 대한 이력결과</h1>
-        </div>
-        <div>
-          <button>수정</button>
-          <button>비교</button>
-        </div>
-      </div>
-      {/* 이력 결과 */}
-      <div>
-        {/* 헤더 */}
-        <div>
-          <div></div>
-          <div>버전</div>
-          <div>수정일시</div>
-          <div>닉네임</div>
-          <div>작업내용</div>
-        </div>
-        <div>
-          <div>
-            <input type="radio" name="prev" />
-            <input type="radio" name="next" />
-          </div>
-          <div>1</div>
-          <div>2026-01-26(수정일시)</div>
-          <div>사용자닉네임</div>
-          <div>수정(작업내용)</div>
-        </div>
-      </div>
-    </div>
+    <HistoryList
+      documentId={id}
+      documentTitle={documentTitle}
+      history={history}
+    />
   );
 }
