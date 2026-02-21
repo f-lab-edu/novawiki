@@ -37,6 +37,13 @@ export default async function Compare({
     return <div>존재하지 않는 문서입니다.</div>;
   }
 
+  const prevData = data[0];
+  const nextData = data[1];
+
+  if (!prevData || !nextData) {
+    return <div>비교할 버전 데이터가 부족합니다.</div>;
+  }
+
   return (
     <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
       {/* 헤더 */}
@@ -49,24 +56,24 @@ export default async function Compare({
 
       {/* 버전 비교 */}
       <WikiDiffer
-        oldText={data[0].content}
-        newText={data[1].content}
-        oldVersion={`v${data[0].version}`}
-        newVersion={`v${data[1].version}`}
+        oldText={prevData.content}
+        newText={nextData.content}
+        oldVersion={`v${prevData.version}`}
+        newVersion={`v${nextData.version}`}
       />
       {/* 버전별 액션 버튼 */}
       <div className="flex gap-4">
         <div className="flex-1">
           <Link href={`/d/${id}?v=${prev}`}>
             <Button variant="outline" className="w-full cursor-pointer">
-              v{data[0].version} 버전 보기
+              v{prevData.version} 버전 보기
             </Button>
           </Link>
         </div>
         <div className="flex-1">
           <Link href={`/d/${id}?v=${next}`}>
             <Button variant="outline" className="w-full cursor-pointer">
-              v{data[1].version} 버전 보기
+              v{nextData.version} 버전 보기
             </Button>
           </Link>
         </div>

@@ -66,10 +66,11 @@ export async function GET(req: Request) {
   }
 
   if (historyData.length === 1) {
+    const versionData = historyData[0];
     return Response.json(
       {
         success: true,
-        data: [historyData, historyData],
+        data: [versionData, versionData],
         errorCode: null,
         message: null,
       },
@@ -77,9 +78,24 @@ export async function GET(req: Request) {
     );
   }
 
+  if (historyData.length !== 2) {
+    return Response.json(
+      {
+        success: true,
+        data: null,
+        errorCode: null,
+        message: null,
+      },
+      { status: 400 },
+    );
+  }
+
+  const prevData = historyData[1];
+  const nextData = historyData[0];
+
   return Response.json({
     success: true,
-    data: [historyData[1], historyData[0]],
+    data: [prevData, nextData],
     errorCode: null,
     message: null,
   });
