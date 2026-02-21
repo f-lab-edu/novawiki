@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q");
   const page = Number(searchParams.get("page") ?? "0");
-  const type = searchParams.get("type"); // 'title' | 'content' | null (both)
+  const type = searchParams.get("type");
   const supabase = createAdminClient();
 
   const offset = page * LIMIT;

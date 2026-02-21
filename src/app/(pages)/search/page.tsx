@@ -1,6 +1,6 @@
 import type { ApiResponse, DocumentType, SearchResponse } from "@/entities";
-import { SearchResultView } from "@/features/search-result-view";
 import { fetcher } from "@/lib/utils/fetcher";
+import { SearchResultView } from "@/widgets";
 
 async function getSearchDocs(
   q: string,
