@@ -14,7 +14,7 @@ export async function GET() {
     )
     .eq("isBlock", false)
     .eq("isDisplay", true)
-    .limit(10);
+    .limit(5);
 
   const { data, error } = await query;
   if (error) {

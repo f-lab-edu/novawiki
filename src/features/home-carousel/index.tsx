@@ -175,8 +175,8 @@ export function HomeCarousel() {
           </div>
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious className="absolute left-3 top-1/2 -translate-y-1/2" />
-      <CarouselNext className="absolute right-3 top-1/2 -translate-y-1/2" />
+      <CarouselPrevious className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer" />
+      <CarouselNext className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" />
     </Carousel>
   );
 }
