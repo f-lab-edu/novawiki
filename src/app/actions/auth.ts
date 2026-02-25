@@ -1,6 +1,6 @@
 "use server";
 
-import { createAdminClient, createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 type AuthState = {
   error: string | null;
@@ -9,10 +9,7 @@ type AuthState = {
 };
 
 /** 로그인 */
-export async function login(
-  prevState: AuthState,
-  formData: FormData,
-): Promise<AuthState> {
+export async function login(formData: FormData): Promise<AuthState> {
   const userid = formData.get("userid") as string;
   const password = formData.get("password") as string;
   const email = `${userid}@novawiki.com`;
@@ -42,7 +39,7 @@ export async function signUp(formData: FormData): Promise<AuthState> {
   const nick = formData.get("nick") as string;
 
   // auth 회원가입
-  const supabase = createAdminClient();
+  const supabase = await createClient();
   const email = `${userid}@novawiki.com`;
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -53,6 +50,7 @@ export async function signUp(formData: FormData): Promise<AuthState> {
   });
 
   if (error) {
+    console.log(error);
     if (error.code === "over_email_send_rate_limit") {
       return { error: "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요." };
     } else if (error.code === "user_already_exists") {
@@ -61,29 +59,6 @@ export async function signUp(formData: FormData): Promise<AuthState> {
       return { error: "알 수 없는 오류가 발생했습니다." };
     }
   }
-
-  // DB에 저장할 데이터
-  // const userData = {
-  //   userid,
-  //   email,
-  //   nick,
-  //   auth_id: data.user?.id,
-  // };
-
-  // const { error: dbError } = await supabase.from("user").insert(userData);
-
-  // if (dbError) {
-  //   // DB 저장 실패 시 auth 유저 롤백
-  //   if (data.user) {
-  //     const adminClient = createAdminClient();
-  //     await adminClient.auth.admin.deleteUser(data.user.id);
-  //   }
-  //   if (dbError.code === "23505") {
-  //     return { error: "사용중인 닉네임입니다." };
-  //   } else {
-  //     return { error: "회원가입에 실패했습니다." };
-  //   }
-  // }
 
   return { error: null, success: true, id: data.user?.id };
 }
@@ -95,10 +70,7 @@ export async function logout() {
 }
 
 /** 비밀번호 변경 */
-export async function updatePassword(
-  prevState: AuthState,
-  formData: FormData,
-): Promise<AuthState> {
+export async function updatePassword(formData: FormData): Promise<AuthState> {
   const newPassword = formData.get("newPassword") as string;
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({
