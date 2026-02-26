@@ -3,11 +3,11 @@ export { DocumentHeader } from "./document-header";
 export { DocumentVersionBanner } from "./document-version-banner";
 // History
 export { HistoryList } from "./history-list";
-export { HomeCard } from "./home-card";
 // Home
-export { HomeCarousel } from "./home-carousel";
-export { HomeRecentCard } from "./home-recent-card";
+export { HomeView, homeQueryOptions } from "./home";
+// Login
 export { LoginForm } from "./login-form";
+// Search
 export { SearchResultGroup } from "./search-result-group";
 // SignUp
 export { SignUpForm } from "./signup-form";

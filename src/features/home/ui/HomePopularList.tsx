@@ -1,13 +1,21 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import type { DocumentType } from "@/entities";
 import { extractContentPreview, getRelativeTime } from "@/lib/utils/common";
+import { homeQueryOptions } from "../model/query";
 
-type HomeCardProps = {
+type HomePopularCardProps = {
   index: number;
   doc: DocumentType;
 };
 
-export function HomeCard({ index, doc }: HomeCardProps) {
+function HomePopularTitle() {
+  return <h2 className="text-xl font-bold mb-4!">오늘의 인기 문서</h2>;
+}
+
+function HomeCard({ index, doc }: HomePopularCardProps) {
   return (
     <Link
       href={`/d/${doc.title}`}
@@ -28,5 +36,30 @@ export function HomeCard({ index, doc }: HomeCardProps) {
         </div>
       </div>
     </Link>
+  );
+}
+
+export function HomePopularList() {
+  const { data } = useQuery(homeQueryOptions("popular"));
+
+  if (!data) {
+    return (
+      <div className="col-span-1">
+        <HomePopularTitle />
+      </div>
+    );
+  }
+
+  const { data: popularList } = data;
+
+  return (
+    <div className="col-span-2">
+      <HomePopularTitle />
+      <div className="flex flex-col gap-3">
+        {popularList?.map((doc, i) => (
+          <HomeCard key={`${i}${doc.title}pop`} index={i} doc={doc} />
+        ))}
+      </div>
+    </div>
   );
 }

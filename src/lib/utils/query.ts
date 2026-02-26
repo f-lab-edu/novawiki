@@ -3,9 +3,9 @@ import { queryOptions } from "@tanstack/react-query";
 import type { ApiResponse, DocumentType } from "@/entities";
 import { fetcher } from "./fetcher";
 
-const defaultQueryKey = (key: QueryKey) => key;
+export const defaultQueryKey = (key: QueryKey) => key;
 
-const defaultQueryOptions = <T>(key: QueryKey, path: string) =>
+export const defaultQueryOptions = <T>(key: QueryKey, path: string) =>
   queryOptions({
     queryKey: key,
     queryFn: (): Promise<ApiResponse<T>> => fetcher(path),
