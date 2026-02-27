@@ -1,6 +1,11 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import type { ApiResponse, DocumentType, SearchResponse } from "@/entities";
+import { SearchResultView, searchQueryOptions } from "@/features";
 import { fetcher } from "@/lib/utils/fetcher";
-import { SearchResultView } from "@/widgets";
 
 async function getSearchDocs(
   q: string,
@@ -25,18 +30,24 @@ export default async function Search({
     );
   }
 
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(searchQueryOptions(q));
+
   const { data } = await getSearchDocs(q);
   if (!data) return null;
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
-      <SearchResultView
-        initialTitle={data.title.docs}
-        titleTotal={data.title.total}
-        initialContent={data.content.docs}
-        contentTotal={data.content.total}
-        searchQuery={q}
-      />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
+        <SearchResultView
+          initialTitle={data.title.docs}
+          titleTotal={data.title.total}
+          initialContent={data.content.docs}
+          contentTotal={data.content.total}
+          searchQuery={q}
+        />
+      </div>
+    </HydrationBoundary>
   );
 }

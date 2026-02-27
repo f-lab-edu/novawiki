@@ -1,9 +1,9 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import type { ApiResponse, DocumentType, SearchResponse } from "@/entities";
+import type { DocumentType } from "@/entities";
 import { SearchResultGroup } from "@/features";
-import { fetcher } from "@/lib/utils/fetcher";
+import { searchInfiniteQueryOptions } from "./model/query";
 
 type SearchResultViewProps = {
   initialTitle: DocumentType[];
@@ -26,20 +26,8 @@ export function SearchResultView({
     hasNextPage: hasTitleNextPage,
     isFetchingNextPage: isTitleFetching,
   } = useInfiniteQuery({
-    queryKey: ["search", "title", searchQuery],
-    queryFn: async ({ pageParam }: { pageParam: number }) => {
-      const { data }: ApiResponse<SearchResponse<DocumentType>> = await fetcher(
-        `/api/document/search?q=${encodeURIComponent(searchQuery)}&type=title&page=${pageParam}`,
-      );
-      if (!data) return [];
-      return data.title.docs;
-    },
-    getNextPageParam: (_lastPage, allPages) => {
-      const totalFetched = allPages.flat().length;
-      return totalFetched < titleTotal ? allPages.length : undefined;
-    },
-    initialPageParam: 1,
-    initialData: { pages: [initialTitle], pageParams: [0] },
+    ...searchInfiniteQueryOptions({ query: searchQuery, type: "title", total: titleTotal }),
+    initialData: { pages: [initialTitle], pageParams: [1] },
   });
 
   const {
@@ -48,20 +36,8 @@ export function SearchResultView({
     hasNextPage: hasContentNextPage,
     isFetchingNextPage: isContentFetching,
   } = useInfiniteQuery({
-    queryKey: ["search", "content", searchQuery],
-    queryFn: async ({ pageParam }: { pageParam: number }) => {
-      const { data }: ApiResponse<SearchResponse<DocumentType>> = await fetcher(
-        `/api/document/search?q=${encodeURIComponent(searchQuery)}&type=content&page=${pageParam}`,
-      );
-      if (!data) return [];
-      return data.content.docs;
-    },
-    getNextPageParam: (_lastPage, allPages) => {
-      const totalFetched = allPages.flat().length;
-      return totalFetched < contentTotal ? allPages.length : undefined;
-    },
-    initialPageParam: 1,
-    initialData: { pages: [initialContent], pageParams: [0] },
+    ...searchInfiniteQueryOptions({ query: searchQuery, type: "content", total: contentTotal }),
+    initialData: { pages: [initialContent], pageParams: [1] },
   });
 
   const titleDocs = titleData.pages.flat();

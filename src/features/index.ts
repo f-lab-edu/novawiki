@@ -8,6 +8,7 @@ export { HomeView, homeQueryOptions } from "./home";
 // Login
 export { LoginForm } from "./login-form";
 // Search
+export { SearchResultView, searchQueryOptions } from "./search";
 export { SearchResultGroup } from "./search-result-group";
 // SignUp
 export { SignUpForm } from "./signup-form";
