@@ -12,7 +12,6 @@ export async function GET(req: Request) {
     .select("*")
     .eq("primaryTitle", tanslatePrimaryTitle(id))
     .eq("isBlock", false)
-    .eq("isDisplay", true)
     .single();
 
   const { data, error } = await query;

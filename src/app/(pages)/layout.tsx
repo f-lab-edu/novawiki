@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/authProvider";
 import { Layout, Toaster } from "@/components";
+import { Footer, Header } from "@/features";
 import Providers from "@/tanstackProviders";
-import { Footer, Header } from "@/widgets";
 
 export const metadata: Metadata = {
   title: "NOVAWIKI",
