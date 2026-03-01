@@ -3,8 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import type { DocumentType } from "@/entities";
+import { homeQueryOptions } from "@/entities";
 import { extractContentPreview, getRelativeTime } from "@/lib/utils/common";
-import { homeQueryOptions } from "../model/query";
 
 type HomePopularCardProps = {
   index: number;

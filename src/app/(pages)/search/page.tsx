@@ -3,15 +3,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import type { ApiResponse, DocumentType, SearchResponse } from "@/entities";
-import { SearchResultView, searchQueryOptions } from "@/features";
-import { fetcher } from "@/lib/utils/fetcher";
-
-async function getSearchDocs(
-  q: string,
-): Promise<ApiResponse<SearchResponse<DocumentType>>> {
-  return fetcher(`/api/document/search?q=${encodeURIComponent(q)}`);
-}
+import { searchInfiniteQueryOptions } from "@/entities";
+import { SearchView } from "@/features";
 
 export default async function Search({
   searchParams,
@@ -32,22 +25,18 @@ export default async function Search({
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(searchQueryOptions(q));
-
-  const { data } = await getSearchDocs(q);
-  if (!data) return null;
+  await Promise.all([
+    queryClient.prefetchInfiniteQuery(
+      searchInfiniteQueryOptions({ query: q, type: "title" }),
+    ),
+    queryClient.prefetchInfiniteQuery(
+      searchInfiniteQueryOptions({ query: q, type: "content" }),
+    ),
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
-        <SearchResultView
-          initialTitle={data.title.docs}
-          titleTotal={data.title.total}
-          initialContent={data.content.docs}
-          contentTotal={data.content.total}
-          searchQuery={q}
-        />
-      </div>
+      <SearchView searchQuery={q} />
     </HydrationBoundary>
   );
 }

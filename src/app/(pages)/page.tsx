@@ -3,7 +3,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { HomeView, homeQueryOptions } from "@/features";
+import { homeQueryOptions } from "@/entities";
+import { HomeView } from "@/features";
 
 export default async function Home() {
   const queryClient = new QueryClient();

@@ -3,11 +3,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import {
-  documentQueryOptions,
-  documentVersionQueryOptions,
-} from "@/lib/utils/query";
-import { DocumentView } from "@/widgets";
+import { documentQueryOptions, documentVersionQueryOptions } from "@/entities";
+import { DocumentView } from "@/features";
 
 export default async function Document({
   params,

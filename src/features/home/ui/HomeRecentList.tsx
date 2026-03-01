@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { homeQueryOptions } from "@/entities";
 import { getRelativeTime } from "@/lib/utils/common";
-import { homeQueryOptions } from "../model/query";
 import { HomeTitle } from "./HomeTitle";
 
 type HomeRecentCardProps = {
