@@ -2,7 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { writeDocument } from "@/app/actions/document";
 import { Button } from "@/components";
 import { Input } from "@/components/ui/shadcn/input";
@@ -19,7 +19,8 @@ type EditFormProps = {
 export function EditForm({ id }: EditFormProps) {
   const { data: response } = useQuery(documentQueryOptions(id));
   const doc = response?.data;
-  const isNew = id === "new" || !doc;
+  const isDeleted = !!doc && !doc.isDisplay;
+  const isNew = id === "new" || (!doc && !isDeleted);
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -27,6 +28,16 @@ export function EditForm({ id }: EditFormProps) {
   const [content, setContent] = useState(doc?.content ?? "");
   const [comment, setComment] = useState("");
   const [agreed, setAgreed] = useState(false);
+
+  const confirmedRef = useRef(false);
+  useEffect(() => {
+    if (!isDeleted || confirmedRef.current) return;
+    confirmedRef.current = true;
+    const load = window.confirm(
+      "과거에 생성 이력이 있습니다. 내용을 불러오시겠습니까?",
+    );
+    if (!load) setContent("");
+  }, [isDeleted]);
 
   const [isPending, startTransition] = useTransition();
 
