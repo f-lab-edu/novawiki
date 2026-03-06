@@ -1,0 +1,25 @@
+{
+  "name": "@f-wiki/markdown-parser",
+  "version": "0.1.0",
+  "description": "Markdown parser that produces a remark-compatible MDAST",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5",
+    "vite": "^6",
+    "vite-plugin-dts": "^4"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "@f-wiki/markdown-editor",
+  "version": "0.1.0",
+  "description": "Framework-agnostic markdown editor (vanilla TypeScript)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style": "./dist/style.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "@f-wiki/markdown-parser": "workspace:*",
+    "dompurify": "^3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5",
+    "@tailwindcss/vite": "^4",
+    "@types/dompurify": "^3",
+    "@types/node": "^20",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^6",
+    "vite-plugin-dts": "^4"
+  }
+}

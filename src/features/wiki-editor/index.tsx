@@ -1,25 +1,23 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-
-// 에디터가 서버에서 렌더링될 수 없는 구조 -> ssr : false
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import "@/packages/markdown-editor/core/styles/editor.css";
+import { wikiLinkPlugin } from "@/lib/plugins/wikiLink";
+import { MarkdownEditor } from "@/packages/markdown-editor/react/src";
 
 type WikiEditorProps = {
   value: string;
   onChange: (value: string) => void;
+  onSave?: (value: string) => void;
 };
 
-export function WikiEditor({ value, onChange }: WikiEditorProps) {
+export function WikiEditor({ value, onChange, onSave }: WikiEditorProps) {
   return (
-    <div>
-      <MDEditor
-        value={value}
-        onChange={(val) => onChange(val ?? "")}
-        height={400}
-      />
-    </div>
+    <MarkdownEditor
+      value={value}
+      onChange={onChange}
+      onSave={onSave}
+      height={400}
+      plugins={[wikiLinkPlugin]}
+    />
   );
 }

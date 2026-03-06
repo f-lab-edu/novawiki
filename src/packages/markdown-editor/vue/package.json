@@ -1,0 +1,33 @@
+{
+  "name": "@f-wiki/markdown-editor-vue",
+  "version": "0.1.0",
+  "description": "Vue adapter for @f-wiki/markdown-editor",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "@f-wiki/markdown-editor": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": ">=3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@vitejs/plugin-vue": "^5",
+    "typescript": "^5",
+    "vite": "^6",
+    "vite-plugin-dts": "^4",
+    "vue": "^3"
+  }
+}
