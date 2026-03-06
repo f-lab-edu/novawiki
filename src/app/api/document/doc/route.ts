@@ -12,13 +12,25 @@ export async function GET(req: Request) {
     .select("*")
     .eq("primaryTitle", tanslatePrimaryTitle(id))
     .eq("isBlock", false)
-    .eq("isDisplay", true)
     .single();
 
   const { data, error } = await query;
   if (error) {
-    console.log("DB 조회 에러", error);
-    return Response.json(null, { status: 401 });
+    return Response.json(
+      {
+        success: false,
+        data: null,
+        errorCode: "DB_ERROR",
+        message: "데이터 조회 중 오류가 발생했습니다.",
+      },
+      { status: 500 },
+    );
   }
-  return Response.json(data);
+
+  return Response.json({
+    success: true,
+    data,
+    errorCode: null,
+    message: null,
+  });
 }

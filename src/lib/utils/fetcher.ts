@@ -1,9 +1,6 @@
-export const fetcher = async (url: string, revalidate = 60) => {
+export const fetcher = async <T>(url: string, revalidate = 60): Promise<T> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
     next: { revalidate },
   });
-  if (!res.ok) {
-    return null;
-  }
   return res.json();
 };

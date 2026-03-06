@@ -104,7 +104,7 @@ export function SignUpForm() {
       return;
     }
 
-    const result = await signUp({ error: null }, formData);
+    const result = await signUp(formData);
     if (result.error) {
       simpleMessageToast("회원가입 오류", result.error);
       return;

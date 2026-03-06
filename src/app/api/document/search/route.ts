@@ -1,43 +1,79 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { decomposeKorean } from "@/lib/utils/common";
+
+const LIMIT = 5;
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q");
-  const supabase = await createClient();
+  const page = Number(searchParams.get("page") ?? "0");
+  const type = searchParams.get("type");
+  const supabase = createAdminClient();
 
-  // 제목
-  const titleQuery = supabase
-    .from("document")
-    .select("*")
-    .eq("isBlock", false)
-    .eq("isDisplay", true)
-    .ilike("letters", `%${decomposeKorean(q)}%`)
-    .order("updated_at", { ascending: false })
-    .limit(10);
+  const offset = page * LIMIT;
 
-  const { data: titleData, error: titleError } = await titleQuery;
-  if (titleError) {
-    console.log("DB 조회 에러", titleError);
-    return Response.json(null, { status: 401 });
+  if (!type || type === "title") {
+    const { data, count, error } = await supabase
+      .from("document")
+      .select("*", { count: "exact" })
+      .eq("isBlock", false)
+      .eq("isDisplay", true)
+      .ilike("letters", `%${decomposeKorean(q)}%`)
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + LIMIT - 1);
+
+    if (error) {
+      return Response.json(
+        {
+          success: false,
+          data: null,
+          errorCode: "DB_ERROR",
+          message: "데이터 조회 중 오류가 발생했습니다.",
+        },
+        { status: 500 },
+      );
+    }
+    const docs = data ?? [];
+    const total = count ?? 0;
+
+    return Response.json({
+      success: true,
+      data: { docs, total },
+      errorCode: null,
+      message: null,
+    });
   }
 
-  // 내용
-  const contentQuery = supabase
-    .from("document")
-    .select("*")
-    .eq("isBlock", false)
-    .eq("isDisplay", true)
-    .ilike("content", `%${decomposeKorean(q)}%`)
-    .order("updated_at", { ascending: false })
-    .limit(10);
+  if (!type || type === "content") {
+    const { data, count, error } = await supabase
+      .from("document")
+      .select("*", { count: "exact" })
+      .eq("isBlock", false)
+      .eq("isDisplay", true)
+      .ilike("content", `%${q}%`)
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + LIMIT - 1);
 
-  const { data: contentData, error: contentError } = await contentQuery;
-  if (contentError) {
-    console.log("DB 조회 에러", contentError);
-    return Response.json(null, { status: 401 });
+    if (error) {
+      return Response.json(
+        {
+          success: false,
+          data: null,
+          errorCode: "DB_ERROR",
+          message: "데이터 조회 중 오류가 발생했습니다.",
+        },
+        { status: 500 },
+      );
+    }
+
+    const docs = data ?? [];
+    const total = count ?? 0;
+
+    return Response.json({
+      success: true,
+      data: { docs, total },
+      errorCode: null,
+      message: null,
+    });
   }
-
-  const result = [titleData, contentData];
-  return Response.json(result);
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { tanslatePrimaryTitle } from "@/lib/utils/common";
+import { decomposeKorean, tanslatePrimaryTitle } from "@/lib/utils/common";
 
 export interface DocumentState {
   error: string | null;
@@ -11,25 +11,15 @@ export interface DocumentState {
 
 /** 문서 생성/수정 */
 export async function writeDocument(
-  prevState: DocumentState,
+  _: DocumentState,
   formData: FormData,
 ): Promise<DocumentState> {
   const supabase = await createClient();
 
   // 현재 사용자 확인
   const {
-    data: { user: authUser },
+    data: { user },
   } = await supabase.auth.getUser();
-
-  if (!authUser) {
-    return { error: "로그인이 필요합니다." };
-  }
-
-  const { data: user } = await supabase
-    .from("user")
-    .select("id")
-    .eq("auth_id", authUser.id)
-    .maybeSingle();
 
   if (!user) {
     return { error: "로그인이 필요합니다." };
@@ -51,47 +41,67 @@ export async function writeDocument(
   }
 
   const primaryTitle = tanslatePrimaryTitle(title);
+  const letters = decomposeKorean(primaryTitle);
 
   if (isNew) {
-    // 새 문서 생성
-    // 기존 문서 존재 여부 확인
-    const { data: existingDoc } = await supabase
-      .from("document")
-      .select("id")
-      .eq("primaryTitle", primaryTitle)
-      .maybeSingle();
-
-    if (existingDoc) {
-      return { error: "이미 존재하는 문서입니다.", isExisting: true };
-    }
-
-    const { error: insertError } = await supabase.from("document").insert({
-      title,
-      primaryTitle,
-      content,
-      comment,
-      user_id: user.id,
+    const { data, error } = await supabase.rpc("create_document_with_history", {
+      p_title: title,
+      p_primary_title: primaryTitle,
+      p_content: content,
+      p_comment: comment,
+      p_letters: letters,
     });
 
-    if (insertError) {
-      return { error: "문서 생성에 실패했습니다." };
+    if (error) {
+      return { error: error.message };
     }
+
+    if (!data.success) {
+      // 이미 존재하는 문서
+      if (data.errorCode === "DOCUMENT_ALREADY_EXISTS") {
+        return { error: data.error, isExisting: true };
+      }
+      return { error: data.error };
+    }
+    return { success: true, error: null };
   } else {
     // 기존 문서 수정 및 history 테이블 생성
-    const { data, error: rpcError } = await supabase.rpc(
-      "update_document_with_history",
-      {
-        p_primary_title: primaryTitle,
-        p_content: content,
-        p_comment: comment,
-        p_user_id: user.id,
-      },
-    );
-    if (rpcError) {
+    const { error } = await supabase.rpc("update_document_with_history", {
+      p_primary_title: primaryTitle,
+      p_content: content,
+      p_comment: comment,
+    });
+    if (error) {
       return { error: "문서 수정에 실패했습니다." };
     }
   }
 
   // 성공 시 문서 페이지로 리다이렉트
   return { success: true, error: null };
+}
+
+/** 문서 삭제 (soft delete - isDisplay: false) */
+export async function deleteDocument(title: string): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "로그인이 필요합니다." };
+  }
+
+  const primaryTitle = tanslatePrimaryTitle(title);
+
+  const { error } = await supabase.rpc("delete_document_with_history", {
+    p_primary_title: primaryTitle,
+    p_profile_id: user.id,
+  });
+
+  if (error) {
+    return { error: "문서 삭제에 실패했습니다." };
+  }
+
+  return { error: null };
 }

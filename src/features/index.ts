@@ -1,21 +1,20 @@
-// Login
-
+// Compare
+export { CompareView } from "./compare";
 // Document
-export { DocumentControls } from "./document-controls";
+export { DocumentView } from "./document";
+// Edit
+export { EditForm } from "./edit";
 // History
-export { HistoryList } from "./history-list";
-export { HomeCard } from "./home-card";
+export { HistoryView } from "./history";
 // Home
-export { HomeCarousel } from "./home-carousel";
-export { HomeRecentCard } from "./home-recent-card";
+export { HomeView } from "./home";
+// Login
 export { LoginForm } from "./login-form";
+// Nav
+export { Footer, Header } from "./nav";
 // Search
-export { SearchResultCard } from "./search-result-card";
-export { SearchResultSection } from "./search-result-section";
+export { SearchView } from "./search";
 // SignUp
 export { SignUpForm } from "./signup-form";
-// Wiki
-export { WikiDiffer } from "./wiki-differ";
-export { WikiEditForm } from "./wiki-edit-form";
 export { WikiEditor } from "./wiki-editor";
 export { WikiViewer } from "./wiki-viewer";
