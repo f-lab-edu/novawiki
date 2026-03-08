@@ -1,10 +1,10 @@
-import type { ApiResponse, DocumentType } from "@/entities";
-import { WikiEditForm } from "@/features";
-import { fetcher } from "@/lib/utils/fetcher";
-
-async function getDoc(id: string): Promise<ApiResponse<DocumentType>> {
-  return fetcher(`/api/document/doc?id=${id}`);
-}
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { documentQueryOptions } from "@/entities";
+import { EditForm } from "@/features";
 
 export default async function Edit({
   params,
@@ -12,17 +12,13 @@ export default async function Edit({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  // 문서 가져오기
-  const { data } = await getDoc(id);
+  const queryClient = new QueryClient();
 
-  // 새 문서로 작성할지 확인
-  const isNew = id === "new" || !data;
-
-  // TODO: id로 문서 데이터 fetch (신규면 빈 값)
-  const title = isNew ? "" : data.title;
-  const content = isNew ? "" : data.content;
+  await queryClient.prefetchQuery(documentQueryOptions(id));
 
   return (
-    <WikiEditForm initialTitle={title} initialContent={content} isNew={isNew} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <EditForm id={id} />
+    </HydrationBoundary>
   );
 }

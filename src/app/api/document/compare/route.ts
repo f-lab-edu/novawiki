@@ -41,8 +41,7 @@ export async function GET(req: Request) {
           id,
           primaryTitle
         ),
-        user:history_user_id_fkey (
-          email,
+        profile:history_profile_id_fkey (
           nick
         )
       `,
