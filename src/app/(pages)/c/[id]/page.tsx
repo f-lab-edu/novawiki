@@ -1,17 +1,10 @@
-import Link from "next/link";
-import { Button } from "@/components";
-import type { ApiResponse, HistoryType } from "@/entities";
-import { WikiDiffer } from "@/features";
-import { isNaNValue } from "@/lib/utils/common";
-import { fetcher } from "@/lib/utils/fetcher";
-
-async function getCompare(
-  prev: number,
-  next: number,
-  id: string,
-): Promise<ApiResponse<HistoryType[]>> {
-  return fetcher(`/api/document/compare?prev=${prev}&next=${next}&id=${id}`);
-}
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { compareQueryOptions } from "@/entities";
+import { CompareView } from "@/features";
 
 export default async function Compare({
   params,
@@ -30,51 +23,13 @@ export default async function Compare({
     return <div>잘못된 접근 방법입니다.</div>;
   }
 
-  const title = decodeURI(id);
-  const { data, errorCode } = await getCompare(Number(prev), Number(next), id);
+  const queryClient = new QueryClient();
 
-  if (errorCode) {
-    return <div>오류가 발생했습니다.</div>;
-  }
-
-  if (!data) {
-    return <div>존재하지 않는 문서입니다.</div>;
-  }
+  await queryClient.prefetchQuery(compareQueryOptions(id, prev, next));
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">&apos;{title}&apos; 문서 비교</h1>
-        <Link href={`/d/${title}`}>
-          <Button className="cursor-pointer">최신 문서로</Button>
-        </Link>
-      </div>
-
-      {/* 버전 비교 */}
-      <WikiDiffer
-        oldText={data[0].content}
-        newText={data[1].content}
-        oldVersion={`v${prev}`}
-        newVersion={`v${next}`}
-      />
-      {/* 버전별 액션 버튼 */}
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <Link href={`/d/${id}?v=${prev}`}>
-            <Button variant="outline" className="w-full cursor-pointer">
-              v{prev} 버전 보기
-            </Button>
-          </Link>
-        </div>
-        <div className="flex-1">
-          <Link href={`/d/${id}?v=${next}`}>
-            <Button variant="outline" className="w-full cursor-pointer">
-              v{next} 버전 보기
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CompareView id={id} prev={prev} next={next} />
+    </HydrationBoundary>
   );
 }

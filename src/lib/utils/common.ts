@@ -186,6 +186,9 @@ export const decomposeKorean = (text: string | null): string => {
       const jongIndex = syllable % 28;
 
       result += CHO[choIndex] + JUNG[jungIndex] + JONG[jongIndex];
+    } else if (code >= 0x3131 && code <= 0x3163) {
+      // 단독 자음(ㄱ-ㅎ) 또는 모음(ㅏ-ㅣ)은 그대로 유지
+      result += char;
     } else if (/[a-zA-Z0-9]/.test(char)) {
       // 영문, 숫자만 추가 (특수문자, 공백 제외)
       result += char;

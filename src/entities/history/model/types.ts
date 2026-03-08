@@ -4,7 +4,7 @@ export type HistoryType = {
   content: string;
   comment: string;
   created_at: string;
-  user?: {
+  profile?: {
     nick: string;
   };
 };

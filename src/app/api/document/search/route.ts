@@ -1,62 +1,80 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { decomposeKorean } from "@/lib/utils/common";
+
+const LIMIT = 5;
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q");
-  const supabase = await createClient();
+  const page = Number(searchParams.get("page") ?? "0");
+  const type = searchParams.get("type");
+  const supabase = createAdminClient();
 
-  // 제목
-  const titleQuery = supabase
-    .from("document")
-    .select("*")
-    .eq("isBlock", false)
-    .eq("isDisplay", true)
-    .ilike("letters", `%${decomposeKorean(q)}%`)
-    .order("updated_at", { ascending: false })
-    .limit(10);
+  const offset = page * LIMIT;
 
-  const { data: titleData, error: titleError } = await titleQuery;
-  if (titleError) {
-    return Response.json(
-      {
-        success: false,
-        data: null,
-        errorCode: "DB_ERROR",
-        message: "데이터 조회 중 오류가 발생했습니다.",
-      },
-      { status: 500 },
-    );
+  let titleDocs: object[] = [];
+  let titleTotal = 0;
+  let contentDocs: object[] = [];
+  let contentTotal = 0;
+
+  if (!type || type === "title") {
+    const { data, count, error } = await supabase
+      .from("document")
+      .select("*", { count: "exact" })
+      .eq("isBlock", false)
+      .eq("isDisplay", true)
+      .ilike("letters", `%${decomposeKorean(q)}%`)
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + LIMIT - 1);
+
+    if (error) {
+      return Response.json(
+        {
+          success: false,
+          data: null,
+          errorCode: "DB_ERROR",
+          message: "데이터 조회 중 오류가 발생했습니다.",
+        },
+        { status: 500 },
+      );
+    }
+
+    titleDocs = data ?? [];
+    titleTotal = count ?? 0;
   }
 
-  // 내용
-  const contentQuery = supabase
-    .from("document")
-    .select("*")
-    .eq("isBlock", false)
-    .eq("isDisplay", true)
-    .ilike("content", `%${decomposeKorean(q)}%`)
-    .order("updated_at", { ascending: false })
-    .limit(10);
+  if (!type || type === "content") {
+    const { data, count, error } = await supabase
+      .from("document")
+      .select("*", { count: "exact" })
+      .eq("isBlock", false)
+      .eq("isDisplay", true)
+      .ilike("content", `%${q}%`)
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + LIMIT - 1);
 
-  const { data: contentData, error: contentError } = await contentQuery;
-  if (contentError) {
-    return Response.json(
-      {
-        success: false,
-        data: null,
-        errorCode: "DB_ERROR",
-        message: "데이터 조회 중 오류가 발생했습니다.",
-      },
-      { status: 500 },
-    );
+    if (error) {
+      return Response.json(
+        {
+          success: false,
+          data: null,
+          errorCode: "DB_ERROR",
+          message: "데이터 조회 중 오류가 발생했습니다.",
+        },
+        { status: 500 },
+      );
+    }
+
+    contentDocs = data ?? [];
+    contentTotal = count ?? 0;
   }
-
-  const result = [titleData, contentData];
 
   return Response.json({
     success: true,
-    data: result,
+    data: {
+      title: { docs: titleDocs, total: titleTotal },
+      content: { docs: contentDocs, total: contentTotal },
+    },
     errorCode: null,
     message: null,
   });

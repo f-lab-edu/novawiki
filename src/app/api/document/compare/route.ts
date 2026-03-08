@@ -41,8 +41,7 @@ export async function GET(req: Request) {
           id,
           primaryTitle
         ),
-        user:history_user_id_fkey (
-          email,
+        profile:history_profile_id_fkey (
           nick
         )
       `,
@@ -66,7 +65,7 @@ export async function GET(req: Request) {
     );
   }
 
-  // 버전 내림차순 조회 -> 0번 인덱스(next) / 1번 인덱스(prev)
+  // 버전 내림차순 조회 -> 1번 인덱스(next) / 0번 인덱스(prev)
   // 데이터가 1개 밖에 없다면, 같은 버전을 비교했다고 간주
   // 데이터가 0개면 없는 버전을 조회했다고 간주
 
@@ -83,10 +82,11 @@ export async function GET(req: Request) {
   }
 
   if (historyData.length === 1) {
+    const versionData = historyData[0];
     return Response.json(
       {
         success: true,
-        data: [historyData, historyData],
+        data: [versionData, versionData],
         errorCode: null,
         message: null,
       },
@@ -94,9 +94,24 @@ export async function GET(req: Request) {
     );
   }
 
+  if (historyData.length !== 2) {
+    return Response.json(
+      {
+        success: true,
+        data: null,
+        errorCode: null,
+        message: null,
+      },
+      { status: 400 },
+    );
+  }
+
+  const prevData = historyData[1];
+  const nextData = historyData[0];
+
   return Response.json({
     success: true,
-    data: [historyData[0], historyData[1]],
+    data: [prevData, nextData],
     errorCode: null,
     message: null,
   });
