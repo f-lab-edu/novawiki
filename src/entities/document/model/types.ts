@@ -9,7 +9,7 @@ export type DocumentType = {
   version: number;
   view: number;
   star: number;
-  user?: {
+  profile?: {
     nick: string;
   };
   document?: {

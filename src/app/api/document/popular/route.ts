@@ -6,15 +6,14 @@ export async function GET() {
     .from("document")
     .select(
       `*,
-      user:document_user_id_fkey (
-      email,
+      profile:document_profile_id_fkey (
       nick
     )
   `,
     )
     .eq("isBlock", false)
     .eq("isDisplay", true)
-    .limit(10);
+    .limit(5);
 
   const { data, error } = await query;
   if (error) {

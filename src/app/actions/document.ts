@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { decomposeKorean, tanslatePrimaryTitle } from "@/lib/utils/common";
 
@@ -19,18 +18,8 @@ export async function writeDocument(
 
   // 현재 사용자 확인
   const {
-    data: { user: authUser },
+    data: { user },
   } = await supabase.auth.getUser();
-
-  if (!authUser) {
-    return { error: "로그인이 필요합니다." };
-  }
-
-  const { data: user } = await supabase
-    .from("user")
-    .select("id")
-    .eq("auth_id", authUser.id)
-    .maybeSingle();
 
   if (!user) {
     return { error: "로그인이 필요합니다." };
@@ -61,7 +50,6 @@ export async function writeDocument(
       p_content: content,
       p_comment: comment,
       p_letters: letters,
-      p_user_id: user.id,
     });
 
     if (error) {
@@ -82,7 +70,6 @@ export async function writeDocument(
       p_primary_title: primaryTitle,
       p_content: content,
       p_comment: comment,
-      p_user_id: user.id,
     });
     if (error) {
       return { error: "문서 수정에 실패했습니다." };
@@ -91,4 +78,30 @@ export async function writeDocument(
 
   // 성공 시 문서 페이지로 리다이렉트
   return { success: true, error: null };
+}
+
+/** 문서 삭제 (soft delete - isDisplay: false) */
+export async function deleteDocument(title: string): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "로그인이 필요합니다." };
+  }
+
+  const primaryTitle = tanslatePrimaryTitle(title);
+
+  const { error } = await supabase.rpc("delete_document_with_history", {
+    p_primary_title: primaryTitle,
+    p_profile_id: user.id,
+  });
+
+  if (error) {
+    return { error: "문서 삭제에 실패했습니다." };
+  }
+
+  return { error: null };
 }

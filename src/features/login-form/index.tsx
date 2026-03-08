@@ -38,7 +38,7 @@ export function LoginForm() {
   };
 
   const handleAction = async (formData: FormData) => {
-    const result = await login({ error: null }, formData);
+    const result = await login(formData);
     if (result.error) {
       setError(result.error);
       return;
