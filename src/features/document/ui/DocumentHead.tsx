@@ -46,7 +46,7 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-4xl font-bold">
           {isOld ? doc.document?.title : doc.title}
         </h1>
         {!isOld ? (

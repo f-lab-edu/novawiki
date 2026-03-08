@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+@import "github-markdown-css/github-markdown.css";
+
 /* @import "tw-animate-css"; */
 
 @font-face {
@@ -29,7 +30,7 @@
   margin: 0;
   /* padding: 0; */
   box-sizing: border-box;
-  font-family: "Pretendard";
+  font-family: "Pretendard", sans-serif;
 }
 
 @theme inline {

@@ -32,6 +32,8 @@ const UNORDERED_LIST_RE = /^([ \t]*)[-*+]\s+(.*)/;
 const ORDERED_LIST_RE = /^([ \t]*)(\d+)\.\s+(.*)/;
 // 테이블
 const TABLE_SEPARATOR_RE = /^\|?[\s:|-]+[\s:|-|]*\|?$/;
+// HTML 주석
+const HTML_COMMENT_RE = /^<!--/;
 // HTML 태그
 const HTML_BLOCK_RE = /^<([a-zA-Z][a-zA-Z0-9-]*)[\s>]/;
 
@@ -151,6 +153,19 @@ export function tokenize(
         lang,
         value: codeLines.join("\n"),
       } satisfies Code);
+      continue;
+    }
+
+    // ── HTML Comment ──
+    if (HTML_COMMENT_RE.test(trimmed)) {
+      const commentLines: string[] = [];
+      while (i < lines.length) {
+        const commentLine = getLine(lines, i);
+        commentLines.push(commentLine);
+        i++;
+        if (commentLine.includes("-->")) break;
+      }
+      // 주석은 노드로 추가하지 않음 (뷰어에서 보이지 않게)
       continue;
     }
 

@@ -1,5 +1,6 @@
 import type {
   Emphasis,
+  Html,
   Image,
   InlineCode,
   InlinePluginResult,
@@ -18,6 +19,7 @@ const IMAGE_RE = /^!\[([^\]]*)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/;
 const LINK_RE = /^\[([^\]]*)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/;
 const STRONG_RE = /^(\*\*|__)(?!\s)([\s\S]*?)(?<!\s)\1/;
 const EMPHASIS_RE = /^(\*|_)(?!\s)([\s\S]*?)(?<!\s)\1/;
+const INLINE_HTML_RE = /^<([a-zA-Z][a-zA-Z0-9-]*)(\s[^>]*)?\/?>/;
 
 function parseInlineTokens(
   src: string,
@@ -111,7 +113,15 @@ function parseInlineTokens(
       continue;
     }
 
-    // 7. Plain text — 다음 특수 문자 직전까지
+    // 7. Inline HTML
+    m = INLINE_HTML_RE.exec(remaining);
+    if (m) {
+      tokens.push({ type: "html", value: m[0] } satisfies Html);
+      remaining = remaining.slice(m[0].length);
+      continue;
+    }
+
+    // 8. Plain text — 다음 특수 문자 직전까지
     const nextSpecial = remaining.slice(1).search(/[\\`*_!\[]/);
     const end = nextSpecial === -1 ? remaining.length : nextSpecial + 1;
     const textValue = remaining.slice(0, end);

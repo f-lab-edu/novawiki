@@ -185,7 +185,10 @@ export const decomposeKorean = (text: string | null): string => {
       const jungIndex = Math.floor((syllable % (21 * 28)) / 28);
       const jongIndex = syllable % 28;
 
-      result += (CHO[choIndex] ?? "") + (JUNG[jungIndex] ?? "") + (JONG[jongIndex] ?? "");
+      result +=
+        (CHO[choIndex] ?? "") +
+        (JUNG[jungIndex] ?? "") +
+        (JONG[jongIndex] ?? "");
     } else if (code >= 0x3131 && code <= 0x3163) {
       // 단독 자음(ㄱ-ㅎ) 또는 모음(ㅏ-ㅣ)은 그대로 유지
       result += char;
@@ -204,6 +207,42 @@ export const tanslatePrimaryTitle = (text: string | null): string => {
   return text.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]/g, "");
 };
 
+/** 마크다운 # 헤딩에 자동 넘버링 추가 */
+export const addHeadingNumbers = (markdown: string | null): string => {
+  if (!markdown) return "";
+
+  const lines = markdown.split("\n");
+  let inCodeBlock = false;
+  let rootCount = 0;
+  let subCount = 0;
+
+  return lines
+    .map((line) => {
+      const trimmed = line.trim();
+
+      if (trimmed.startsWith("```")) {
+        inCodeBlock = !inCodeBlock;
+        return line;
+      }
+
+      if (inCodeBlock) return line;
+
+      if (trimmed.startsWith("## ")) {
+        subCount++;
+        const title = trimmed.slice(3).trim();
+        return `## ${`${rootCount === 0 ? "" : `${rootCount}.`}`}${subCount}. ${title}`;
+      } else if (trimmed.startsWith("# ")) {
+        rootCount++;
+        subCount = 0;
+        const title = trimmed.slice(2).trim();
+        return `# ${rootCount}. ${title}`;
+      }
+
+      return line;
+    })
+    .join("\n");
+};
+
 /** 마크다운 제목 파싱 함수 */
 export type HeadingType = "root" | "sub";
 export type HeadingItem = { type: HeadingType; title: string };
@@ -213,8 +252,17 @@ export const parseHeads = (markdown: string | null): HeadingItem[] => {
   const lines = markdown.split("\n");
   const headings: HeadingItem[] = [];
 
+  let inCodeBlock = false;
+
   for (const line of lines) {
     const trimmed = line.trim();
+
+    if (trimmed.startsWith("```")) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
+
+    if (inCodeBlock) continue;
 
     if (trimmed.startsWith("## ")) {
       headings.push({ type: "sub", title: trimmed.slice(3).trim() });

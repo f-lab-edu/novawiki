@@ -5,9 +5,10 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { documentQueryOptions, documentVersionQueryOptions } from "@/entities";
 import { WikiViewer } from "@/features";
-import { parseHeads } from "@/lib/utils/common";
+import { addHeadingNumbers, parseHeads } from "@/lib/utils/common";
 import { DocumentDeletedBanner } from "./ui/DocumentDeletedBanner";
 import { DocumentHead } from "./ui/DocumentHead";
+import { DocumentIndex } from "./ui/DocumentIndex";
 import { DocumentVersionBanner } from "./ui/DocumentVersionBanner";
 
 type DocumentViewProps = {
@@ -41,7 +42,7 @@ export function DocumentView({ id, v }: DocumentViewProps) {
     );
   }
 
-  const indexList = parseHeads(doc.content);
+  const content = addHeadingNumbers(doc.content);
   const isDisplay = doc.isDisplay;
 
   return (
@@ -55,26 +56,9 @@ export function DocumentView({ id, v }: DocumentViewProps) {
 
           <div className="flex gap-6">
             <div className="flex-1 min-w-0">
-              <WikiViewer content={doc.content} />
+              <WikiViewer content={content} />
             </div>
-
-            <nav className="w-50 shrink-0 absolute -right-60">
-              <div className="sticky top-6 rounded-lg border p-4">
-                <h3 className="font-semibold mb-3">목차</h3>
-                <ol className="flex flex-col gap-2 text-sm text-muted-foreground">
-                  {indexList.map((item, index) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`#${item.title}`}
-                        className="hover:text-foreground transition-colors"
-                      >
-                        {index + 1}. {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </nav>
+            <DocumentIndex content={content} />
           </div>
         </>
       ) : (

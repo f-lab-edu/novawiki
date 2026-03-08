@@ -12,6 +12,7 @@
   .md-textarea {
     @apply w-1/2 h-full resize-none border-r border-gray-200 p-3 font-mono text-sm leading-relaxed focus:outline-none bg-gray-50;
     tab-size: 2;
+    font-variant-ligatures: none;
   }
 
   .md-preview {
@@ -41,5 +42,10 @@
 
   .md-modal {
     @apply bg-white rounded-lg shadow-xl w-full max-w-md p-6 flex flex-col gap-4;
+  }
+
+  .markdown-body ul,
+  .markdown-body ol {
+    list-style: revert;
   }
 }

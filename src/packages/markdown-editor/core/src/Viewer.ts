@@ -14,6 +14,8 @@ import type {
 } from "@f-wiki/markdown-parser";
 import { parse } from "@f-wiki/markdown-parser";
 import DOMPurify from "dompurify";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 
 // ─── 기본 위험 URL 스킴 ───────────────────────────────────────────────────────
 
@@ -57,7 +59,7 @@ function renderInline(
           const link = node as Link;
           const href = safeUrl(link.url, urlFilter);
           const title = link.title ? ` title="${escapeAttr(link.title)}"` : "";
-          return `<a href="${escapeAttr(href)}"${title}>${renderInline(link.children, urlFilter)}</a>`;
+          return `<a href="${escapeAttr(href)}"${title} target="_blank" rel="noopener noreferrer">${renderInline(link.children, urlFilter)}</a>`;
         }
         case "image": {
           const img = node as Image;
@@ -84,14 +86,21 @@ function renderBlock(
 
     case "heading": {
       const h = node as Heading;
-      return `<h${h.depth}>${renderInline(h.children, urlFilter)}</h${h.depth}>`;
+      const text = h.children
+        .map((n) => (n.type === "text" ? n.value : ""))
+        .join("");
+      return `<h${h.depth} id="${text}">${renderInline(h.children, urlFilter)}</h${h.depth}>`;
     }
 
     case "code": {
-      const lang = node.lang
-        ? ` class="language-${escapeAttr(node.lang)}"`
-        : "";
-      return `<pre><code${lang}>${escapeHtml(node.value)}</code></pre>`;
+      if (node.lang && hljs.getLanguage(node.lang)) {
+        const highlighted = hljs.highlight(node.value, {
+          language: node.lang,
+          ignoreIllegals: true,
+        });
+        return `<pre><code class="hljs language-${escapeAttr(node.lang)}">${highlighted.value}</code></pre>`;
+      }
+      return `<pre><code>${escapeHtml(node.value)}</code></pre>`;
     }
 
     case "blockquote":
@@ -110,7 +119,14 @@ function renderBlock(
             item.checked !== null
               ? `<input type="checkbox" disabled${item.checked ? " checked" : ""} /> `
               : "";
-          return `<li>${checkbox}${renderBlocks(item.children, urlFilter)}</li>`;
+          const content = item.children
+            .map((child) =>
+              child.type === "paragraph"
+                ? renderInline(child.children, urlFilter)
+                : renderBlock(child, urlFilter),
+            )
+            .join("");
+          return `<li>${checkbox}${content}</li>`;
         })
         .join("");
       return `<${tag}${start}>${items}</${tag}>`;
@@ -197,6 +213,7 @@ export class Viewer {
       "prose",
       "prose-neutral",
       "max-w-none",
+      "markdown-body",
     );
   }
 
@@ -205,6 +222,7 @@ export class Viewer {
     const rawHtml = renderBlocks(ast.children, this.urlFilter);
     const clean = DOMPurify.sanitize(rawHtml, {
       USE_PROFILES: { html: true },
+      ADD_ATTR: ["target", "rel"],
       FORBID_TAGS: ["script", "style"],
       FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover"],
     });
