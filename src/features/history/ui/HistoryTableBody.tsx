@@ -5,16 +5,24 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { historyQueryOptions } from "@/entities";
 import { getRelativeTime } from "@/lib/utils/common";
-import { useHistoryStore } from "@/store/useHistoryStore";
 
 type HistoryTableBodyProps = {
   title: string;
+  prev: number | null;
+  next: number | null;
+  setPrev: (version: number) => void;
+  setNext: (version: number) => void;
 };
 
-export function HistoryTableBody({ title }: HistoryTableBodyProps) {
+export function HistoryTableBody({
+  title,
+  prev,
+  next,
+  setPrev,
+  setNext,
+}: HistoryTableBodyProps) {
   const { data: response } = useQuery(historyQueryOptions(title));
   const history = response?.data ?? [];
-  const { prev, next, setPrev, setNext } = useHistoryStore();
 
   return (
     // 이력 목록
