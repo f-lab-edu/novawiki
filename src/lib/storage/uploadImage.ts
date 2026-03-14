@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 
-const BUCKET = "wiki";
+const BUCKET = "novawiki";
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
