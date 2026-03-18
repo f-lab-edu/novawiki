@@ -7,8 +7,9 @@ import { login } from "@/app/actions/auth";
 import { Button } from "@/components";
 import { Field, FieldGroup } from "@/components/ui/shadcn/field";
 import { Input } from "@/components/ui/shadcn/input";
-import { createClient } from "@/lib/supabase/client";
+import type { ApiResponse, GoogleOAuthData } from "@/entities";
 import { simpleMessageToast } from "@/lib/utils/common";
+import { fetcher } from "@/lib/utils/fetcher";
 import { useUserStore } from "@/store/useUserStore";
 
 export function LoginForm() {
@@ -33,13 +34,15 @@ export function LoginForm() {
   };
 
   const handleGoogleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    const { data, errorCode }: ApiResponse<GoogleOAuthData> =
+      await fetcher("/api/auth/google");
+
+    if (!data || errorCode) {
+      simpleMessageToast("로그인 오류", "Google 로그인을 할 수 없습니다.");
+      return;
+    }
+    const { url } = data;
+    window.location.href = url;
   };
 
   const handleAction = async (formData: FormData) => {
