@@ -236,3 +236,7 @@ export const simpleMessageToast = (title: string, desc: string) => {
     },
   });
 };
+
+export const isNaNValue = (value: string | null | undefined) => {
+  return Number.isNaN(Number(value));
+};

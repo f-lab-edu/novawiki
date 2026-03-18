@@ -11,7 +11,6 @@ export interface DocumentState {
 
 /** 문서 생성/수정 */
 export async function writeDocument(
-  _: DocumentState,
   formData: FormData,
 ): Promise<DocumentState> {
   const supabase = await createClient();
