@@ -58,7 +58,7 @@ export function LoginForm() {
   };
 
   return (
-    <form action={handleAction} className="w-80">
+    <form action={handleAction} className="w-full sm:w-80">
       <FieldGroup className="gap-4">
         <Field>
           <Input

@@ -96,9 +96,8 @@ function SlideIcon({
 }) {
   return (
     <svg
+      className="w-30 sm:w-45"
       xmlns="http://www.w3.org/2000/svg"
-      width="180"
-      height="180"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -122,17 +121,19 @@ function CarouselSlide({
   return (
     <CarouselItem className="pl-0!">
       <div
-        className={`relative h-40 sm:h-52 lg:h-64 rounded-xl bg-linear-to-br ${gradient} flex items-center px-6 sm:px-12 overflow-hidden`}
+        className={`relative h-40 sm:h-64 rounded-xl bg-linear-to-br ${gradient} flex items-center px-6 sm:px-12 overflow-hidden`}
       >
         <div className="absolute right-16 top-1/2 -translate-y-1/2 text-white/10">
           <SlideIcon title={label}>{iconPaths}</SlideIcon>
         </div>
-        <div className="relative z-10 left-8">
+        <div className="relative p-8">
           <p className="text-white/60 text-sm font-medium tracking-wider uppercase mb-2">
             {label}
           </p>
-          <h2 className="text-white text-3xl font-bold mb-2">{title}</h2>
-          <p className="text-white/70 text-base">{description}</p>
+          <h2 className="text-white text-base sm:text-3xl font-bold mb-2">
+            {title}
+          </h2>
+          <p className="text-white/70 text-sm sm:text-base">{description}</p>
         </div>
       </div>
     </CarouselItem>

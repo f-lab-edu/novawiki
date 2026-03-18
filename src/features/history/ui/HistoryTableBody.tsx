@@ -30,7 +30,7 @@ export function HistoryTableBody({
       {history.map((item) => (
         <div
           key={item.id}
-          className="grid grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px] gap-4 px-4 py-3 text-sm hover:bg-muted/30 transition-colors"
+          className="text-xs sm:text-sm grid grid-cols-[25px_25px_25px_50px_50px_30px_1fr_30px] sm:grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px] gap-4 px-3 sm:px-4 py-3 hover:bg-muted/30 transition-colors"
         >
           <div className="flex justify-center">
             <input

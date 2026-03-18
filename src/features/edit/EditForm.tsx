@@ -80,7 +80,7 @@ export function EditForm({ id }: EditFormProps) {
   return (
     <form
       action={handleAction}
-      className="w-full max-w-300 mx-auto flex flex-col gap-6"
+      className="px-4 sm:px-0 w-full max-w-300 mx-auto flex flex-col gap-6"
     >
       {/* hidden inputs */}
       <input type="hidden" name="content" value={content} />
@@ -94,7 +94,7 @@ export function EditForm({ id }: EditFormProps) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         readOnly={!isNew}
-        className="text-lg h-12"
+        className="text-lg h-10"
       />
 
       {/* 마크다운 에디터 + 미리보기 */}
@@ -112,21 +112,22 @@ export function EditForm({ id }: EditFormProps) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           rows={3}
+          className="text-sm"
         />
       </div>
 
       {/* 동의 체크박스 + 저장/취소 */}
-      <div className="flex items-center justify-between border-t pt-4">
-        <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none">
+      <div className="w-full flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-0">
+        <label className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground cursor-pointer select-none">
           <input
             type="checkbox"
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
-            className="size-4 cursor-pointer"
+            className="size-3 sm:size-4 cursor-pointer"
           />
           저장하면 사용자 ID로 영구히 기록됩니다. 동의하십니까?
         </label>
-        <div className="flex items-center gap-2">
+        <div className="justify-end flex items-center gap-2">
           <Button
             type="button"
             variant="outline"
