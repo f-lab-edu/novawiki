@@ -68,6 +68,7 @@ export function LoginForm() {
             value={userid}
             onChange={handleUseridChange}
             placeholder="아이디"
+            className="text-sm"
           />
         </Field>
         <Field>
@@ -78,6 +79,7 @@ export function LoginForm() {
             placeholder="비밀번호"
             value={password}
             onChange={handlePasswordChange}
+            className="text-sm"
           />
         </Field>
 
