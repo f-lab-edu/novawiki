@@ -107,3 +107,33 @@ export async function deleteDocument(
 
   return { error: null };
 }
+
+/** 문서 되돌리기 */
+export async function restoreDocument(
+  title: string,
+  targetVersion: number,
+): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "로그인이 필요합니다." };
+  }
+
+  const primaryTitle = tanslatePrimaryTitle(title);
+
+  const { error } = await supabase.rpc("restore_document_with_history", {
+    p_primary_title: primaryTitle,
+    p_profile_id: user.id,
+    p_version: targetVersion,
+  });
+
+  if (error) {
+    return { error: "되돌리기에 실패했습니다." };
+  }
+
+  return { error: null };
+}
