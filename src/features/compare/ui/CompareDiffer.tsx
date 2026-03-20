@@ -103,7 +103,7 @@ export function CompareDiffer({
           <div className="font-mono text-sm">
             {Array.from({ length: maxLines }).map((_, idx) => {
               const line = oldLines[idx] || { type: "normal", content: "" };
-              return (
+              return line.type === "removed" || line.type === "modified" ? (
                 <div
                   key={`${oldVersion}-${idx}-${line.highlightedContent}`}
                   className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
@@ -114,6 +114,8 @@ export function CompareDiffer({
                 >
                   {line.highlightedContent || line.content || "\u00A0"}
                 </div>
+              ) : (
+                <></>
               );
             })}
           </div>
@@ -129,7 +131,7 @@ export function CompareDiffer({
           <div className="font-mono text-sm">
             {Array.from({ length: maxLines }).map((_, idx) => {
               const line = newLines[idx] || { type: "normal", content: "" };
-              return (
+              return line.type === "added" || line.type === "modified" ? (
                 <div
                   key={`${newVersion}-${idx}-${line.highlightedContent}`}
                   className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
@@ -140,6 +142,8 @@ export function CompareDiffer({
                 >
                   {line.highlightedContent || line.content || "\u00A0"}
                 </div>
+              ) : (
+                <></>
               );
             })}
           </div>
