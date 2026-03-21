@@ -58,7 +58,7 @@ export function LoginForm() {
   };
 
   return (
-    <form action={handleAction} className="w-80">
+    <form action={handleAction} className="w-full sm:w-80">
       <FieldGroup className="gap-4">
         <Field>
           <Input
@@ -68,6 +68,7 @@ export function LoginForm() {
             value={userid}
             onChange={handleUseridChange}
             placeholder="아이디"
+            className="text-sm"
           />
         </Field>
         <Field>
@@ -78,6 +79,7 @@ export function LoginForm() {
             placeholder="비밀번호"
             value={password}
             onChange={handlePasswordChange}
+            className="text-sm"
           />
         </Field>
 

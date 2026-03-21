@@ -11,7 +11,7 @@ type SearchResultCardProps = {
 
 export function SearchResultCard({ doc }: SearchResultCardProps) {
   return (
-    <div className="flex items-center justify-between rounded-lg border p-8 hover:bg-muted/50 transition-colors">
+    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center sm:justify-between rounded-lg border p-5 sm:p-8 hover:bg-muted/50 transition-colors">
       <Link
         href={`/d/${doc.title}`}
         className="flex flex-col gap-2 cursor-pointer"

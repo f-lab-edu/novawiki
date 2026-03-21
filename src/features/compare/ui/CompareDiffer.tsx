@@ -93,7 +93,7 @@ export function CompareDiffer({
   }, [oldText, newText]);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col sm:flex-row gap-4">
       {/* 이전 버전 */}
       <div className="flex-1 min-w-0">
         <div className="rounded-lg border overflow-hidden">
