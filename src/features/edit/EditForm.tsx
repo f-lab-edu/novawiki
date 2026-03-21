@@ -52,10 +52,7 @@ export function EditForm({ id }: EditFormProps) {
 
   const handleAction = async (formData: FormData) => {
     startTransition(async () => {
-      const { error, success, isExisting } = await writeDocument(
-        { error: null },
-        formData,
-      );
+      const { error, success, isExisting } = await writeDocument(formData);
       // 성공
       if (success) {
         queryClient.invalidateQueries({

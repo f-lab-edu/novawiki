@@ -1,16 +1,33 @@
 import { createAdminClient } from "@/lib/supabase/server";
-import { tanslatePrimaryTitle } from "@/lib/utils/common";
+import { isNaNValue, tanslatePrimaryTitle } from "@/lib/utils/common";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
-  let prev = Number(searchParams.get("prev"));
-  let next = Number(searchParams.get("next"));
+  const prev = searchParams.get("prev");
+  const next = searchParams.get("next");
 
-  if (prev > next) {
-    const tempNext = next;
-    next = prev;
-    prev = tempNext;
+  const isNotNumber = isNaNValue(prev) || isNaNValue(next);
+
+  if (isNotNumber) {
+    return Response.json(
+      {
+        success: false,
+        data: null,
+        errorCode: "VERSION_ERROR",
+        message: "잘못된 버전 정보입니다.",
+      },
+      { status: 500 },
+    );
+  }
+
+  let prevVersion: number = Number(searchParams.get("prev"));
+  let nextVersion: number = Number(searchParams.get("next"));
+
+  if (prevVersion > nextVersion) {
+    const tempNext = nextVersion;
+    nextVersion = prevVersion;
+    prevVersion = tempNext;
   }
 
   const supabase = createAdminClient();
@@ -31,7 +48,7 @@ export async function GET(req: Request) {
     )
     .eq("isBlock", false)
     .eq("document.primaryTitle", tanslatePrimaryTitle(id))
-    .in("version", [prev, next])
+    .in("version", [prevVersion, nextVersion])
     .order("version", { ascending: false });
 
   const { data: historyData, error } = await query;
