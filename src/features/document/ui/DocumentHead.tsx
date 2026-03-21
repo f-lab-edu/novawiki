@@ -45,12 +45,12 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">
+      <div className="flex flex-col-reverse sm:flex-row items-center justify-between">
+        <h1 className="w-full text-4xl font-semibold">
           {isOld ? doc.document?.title : doc.title}
         </h1>
         {!isOld ? (
-          <div className="flex items-center gap-2">
+          <div className="flex mb-4! sm:m-0 w-full justify-end sm:items-center gap-2">
             {/* 수정 */}
             <Button
               variant="outline"

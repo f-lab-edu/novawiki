@@ -21,7 +21,7 @@ function HomeRecentCard({ index, doc }: HomeRecentCardProps) {
   return (
     <Link
       href={`/d/${doc.title}`}
-      className="flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors cursor-pointer"
+      className="flex items-center justify-between px-3 sm:px-4 py-3 hover:bg-muted/50 transition-colors cursor-pointer"
     >
       <div className="flex items-center gap-3">
         <span className="text-sm font-medium text-muted-foreground w-5 text-center">
@@ -50,9 +50,9 @@ export function HomeRecentList() {
   const { data: recentList } = data;
 
   return (
-    <div className="col-span-1">
+    <div className="col-span-1 flex flex-col">
       <HomeTitle title={TITLE} />
-      <div className="rounded-lg border divide-y">
+      <div className="rounded-lg border divide-y flex-1">
         {recentList?.map((doc, i) => (
           <HomeRecentCard key={`${i}${doc.title}rec`} index={i} doc={doc} />
         ))}

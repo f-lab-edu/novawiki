@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components";
 import { simpleMessageToast } from "@/lib/utils/common";
-import { useHistoryStore } from "@/store/useHistoryStore";
 import { HistoryTableBody } from "./ui/HistoryTableBody";
 import { HistoryTableHead } from "./ui/HistoryTableHead";
 
@@ -14,7 +14,8 @@ type HistoryListProps = {
 
 export function HistoryView({ title }: HistoryListProps) {
   const router = useRouter();
-  const { prev, next } = useHistoryStore();
+  const [prev, setPrev] = useState<number | null>(null);
+  const [next, setNext] = useState<number | null>(null);
 
   const handleCompare = () => {
     if (prev !== null && next !== null) {
@@ -25,11 +26,13 @@ export function HistoryView({ title }: HistoryListProps) {
   };
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
+    <div className="px-4 sm:px-0 w-full max-w-300 mx-auto flex flex-col gap-4">
       {/* 상단 제목 및 버튼 */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">&apos;{title}&apos;의 이력 결과</h1>
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-semibold">
+          &apos;{title}&apos;의 이력 결과
+        </h1>
+        <div className="flex justify-end sm:items-center gap-2 mb-4! sm:mb-0!">
           <Link href={`/e/${title}`}>
             <Button variant="outline" className="cursor-pointer" size="sm">
               수정
@@ -47,7 +50,13 @@ export function HistoryView({ title }: HistoryListProps) {
         <HistoryTableHead />
 
         {/* 이력 목록 */}
-        <HistoryTableBody title={title} />
+        <HistoryTableBody
+          title={title}
+          prev={prev}
+          next={next}
+          setPrev={setPrev}
+          setNext={setNext}
+        />
       </div>
     </div>
   );

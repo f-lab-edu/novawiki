@@ -20,7 +20,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@f-wiki/markdown-parser": ["./src/packages/markdown-parser/src/index.ts"],
+      "@f-wiki/markdown-editor": ["./src/packages/markdown-editor/core/src/index.ts"],
+      "@f-wiki/markdown-editor-react": ["./src/packages/markdown-editor/react/src/index.ts"]
     }
   },
   "include": [
@@ -31,5 +34,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/packages/**/vite.config.ts", "src/packages/markdown-editor/vue"]
 }

@@ -31,7 +31,7 @@ const SLIDES: SlideData[] = [
   },
   {
     label: "Contribute",
-    title: "오늘의 문서를 작성해보세요",
+    title: "문서를 작성해보세요",
     description: "당신의 지식이 누군가에게 큰 도움이 됩니다",
     gradient: "from-blue-600 to-indigo-800",
     iconPaths: (
@@ -87,12 +87,17 @@ const SLIDES: SlideData[] = [
   },
 ];
 
-function SlideIcon({ title, children }: { title: string; children: ReactNode }) {
+function SlideIcon({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <svg
+      className="w-30 sm:w-45"
       xmlns="http://www.w3.org/2000/svg"
-      width="180"
-      height="180"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -106,21 +111,29 @@ function SlideIcon({ title, children }: { title: string; children: ReactNode }) 
   );
 }
 
-function CarouselSlide({ label, title, description, gradient, iconPaths }: SlideData) {
+function CarouselSlide({
+  label,
+  title,
+  description,
+  gradient,
+  iconPaths,
+}: SlideData) {
   return (
     <CarouselItem className="pl-0!">
       <div
-        className={`relative h-64 rounded-xl bg-linear-to-br ${gradient} flex items-center px-12 overflow-hidden`}
+        className={`relative h-40 sm:h-64 rounded-xl bg-linear-to-br ${gradient} flex items-center px-6 sm:px-12 overflow-hidden`}
       >
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 text-white/10">
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 text-white/10">
           <SlideIcon title={label}>{iconPaths}</SlideIcon>
         </div>
-        <div className="relative z-10">
+        <div className="relative p-8">
           <p className="text-white/60 text-sm font-medium tracking-wider uppercase mb-2">
             {label}
           </p>
-          <h2 className="text-white text-3xl font-bold mb-2">{title}</h2>
-          <p className="text-white/70 text-base">{description}</p>
+          <h2 className="text-white text-base sm:text-3xl font-bold mb-2">
+            {title}
+          </h2>
+          <p className="text-white/70 text-sm sm:text-base">{description}</p>
         </div>
       </div>
     </CarouselItem>

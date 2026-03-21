@@ -4,3 +4,8 @@ export type ApiResponse<T> = {
   errorCode?: string;
   message?: string;
 };
+
+export type GoogleOAuthData = {
+  url: string;
+  provider: string;
+};

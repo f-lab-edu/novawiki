@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "github-markdown-css/github-markdown.css";
+
 /* @import "tw-animate-css"; */
 
 @font-face {
@@ -12,12 +14,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@keyframes slideIn {
+@keyframes slideInFromRight {
   from {
     opacity: 0;
     transform: translateX(100%);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
   to {
     opacity: 1;
     transform: translateX(0);
@@ -28,7 +40,7 @@
   margin: 0;
   /* padding: 0; */
   box-sizing: border-box;
-  font-family: "Pretendard";
+  font-family: "Pretendard", sans-serif;
 }
 
 @theme inline {
