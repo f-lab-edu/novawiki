@@ -60,7 +60,7 @@ export function ChatButton({ id, documentId }: ChatButtonProps) {
     <>
       {/* 채팅 패널 */}
       {isOpen && (
-        <div className="fixed bottom-35 right-4 z-50 w-80 h-120 rounded-xl border border-border shadow-2xl bg-background flex flex-col overflow-hidden animate-[slide-up_1s_ease-out_forwards]">
+        <div className="fixed bottom-20 right-4 z-50 w-80 h-120 rounded-xl border border-border shadow-2xl bg-background flex flex-col overflow-hidden animate-[slide-up_1s_ease-out_forwards]">
           <ChatPanel id={id} documentId={documentId} channelRef={channelRef} />
           <button
             type="button"
@@ -87,7 +87,7 @@ export function ChatButton({ id, documentId }: ChatButtonProps) {
       <button
         type="button"
         onClick={handleOpen}
-        className="fixed cursor-pointer bottom-20 right-4 z-50 w-12 h-12 bg-gray-800 hover:bg-black text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
+        className="fixed cursor-pointer bottom-5 right-4 z-50 w-12 h-12 bg-gray-800 hover:bg-black text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
         aria-label="채팅 열기"
       >
         <svg
