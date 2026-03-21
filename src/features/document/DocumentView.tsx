@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { documentQueryOptions, documentVersionQueryOptions } from "@/entities";
 import { WikiViewer } from "@/features";
-import { addHeadingNumbers, parseHeads } from "@/lib/utils/common";
+import { addHeadingNumbers } from "@/lib/utils/common";
 import { DocumentDeletedBanner } from "./ui/DocumentDeletedBanner";
 import { DocumentHead } from "./ui/DocumentHead";
 import { DocumentIndex } from "./ui/DocumentIndex";
@@ -46,7 +46,7 @@ export function DocumentView({ id, v }: DocumentViewProps) {
   const isDisplay = doc.isDisplay;
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-6 relative">
+    <div className="w-full px-4 sm:px-0 max-w-300 mx-auto flex flex-col gap-6 relative">
       {!isDisplay && <DocumentDeletedBanner id={id} />}
       {isOld && isDisplay && <DocumentVersionBanner doc={doc} id={id} />}
 
@@ -54,7 +54,7 @@ export function DocumentView({ id, v }: DocumentViewProps) {
         <>
           <DocumentHead doc={doc} isOld={isOld} />
 
-          <div className="flex gap-6">
+          <div className="flex flex-col-reverse sm:flex-row gap-6">
             <div className="flex-1 min-w-0">
               <WikiViewer content={content} />
             </div>

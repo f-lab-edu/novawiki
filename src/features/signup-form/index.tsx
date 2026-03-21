@@ -117,16 +117,16 @@ export function SignUpForm() {
   };
 
   return (
-    <form action={handleAction} className="w-100">
+    <form action={handleAction} className="w-full sm:w-80">
       <input type="hidden" name="userid" value={userid} />
       <input type="hidden" name="password" value={password} />
       <input type="hidden" name="passwordChk" value={passwordChk} />
 
       <FieldGroup className="gap-4">
-        <div className="overflow-hidden">
+        <div>
           {step === 1 && (
             <div>
-              <Field data-invalid={!!useridError} className="p-1">
+              <Field data-invalid={!!useridError}>
                 <Input
                   id="input-field-userid"
                   type="text"
@@ -136,6 +136,7 @@ export function SignUpForm() {
                   placeholder="아이디"
                   aria-invalid={!!useridError}
                   autoFocus
+                  className="text-sm"
                 />
                 {isValidUserid ? null : useridError ? (
                   <FieldDescription className="text-red-500">
@@ -152,7 +153,7 @@ export function SignUpForm() {
 
           {step === 2 && (
             <div className="flex flex-col gap-4">
-              <Field data-invalid={!!passwordError} className="p-1">
+              <Field data-invalid={!!passwordError}>
                 <Input
                   id="input-field-password"
                   type="password"
@@ -162,6 +163,7 @@ export function SignUpForm() {
                   onChange={handlePasswordChange}
                   aria-invalid={!!passwordError}
                   autoFocus
+                  className="text-sm"
                 />
                 {isValidPassword ? null : passwordError ? (
                   <FieldDescription className="text-red-500">
@@ -173,7 +175,7 @@ export function SignUpForm() {
                   </FieldDescription>
                 )}
               </Field>
-              <Field data-invalid={!!passwordChkError} className="p-1">
+              <Field data-invalid={!!passwordChkError}>
                 <Input
                   id="input-field-passwordChk"
                   type="password"
@@ -182,6 +184,7 @@ export function SignUpForm() {
                   value={passwordChk}
                   onChange={handlePasswordChkChange}
                   aria-invalid={!!passwordChkError}
+                  className="text-sm"
                 />
                 {isValidPasswordChk ? null : passwordChkError ? (
                   <FieldDescription className="text-red-500">
@@ -198,7 +201,7 @@ export function SignUpForm() {
 
           {step === 3 && (
             <div>
-              <Field data-invalid={!!nickError} className="p-1">
+              <Field data-invalid={!!nickError}>
                 <Input
                   id="input-field-nick"
                   type="text"
@@ -208,6 +211,7 @@ export function SignUpForm() {
                   onChange={handleNickChange}
                   aria-invalid={!!nickError}
                   autoFocus
+                  className="text-sm"
                 />
                 {isValidNick ? null : nickError ? (
                   <FieldDescription className="text-red-500">
@@ -223,7 +227,7 @@ export function SignUpForm() {
           )}
         </div>
 
-        <div className="flex gap-2 mt-2! p-1">
+        <div className="flex gap-2 mt-2!">
           {step > 1 && (
             <Button
               type="button"
