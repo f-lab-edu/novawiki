@@ -81,7 +81,9 @@ export async function writeDocument(
 }
 
 /** 문서 삭제 (soft delete - isDisplay: false) */
-export async function deleteDocument(title: string): Promise<{ error: string | null }> {
+export async function deleteDocument(
+  title: string,
+): Promise<{ error: string | null }> {
   const supabase = await createClient();
 
   const {

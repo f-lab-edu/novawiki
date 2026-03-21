@@ -1,4 +1,4 @@
-export type { ApiResponse } from "./api/model/types";
+export type { ApiResponse, GoogleOAuthData } from "./api/model/types";
 // Compare
 export { compareQueryOptions } from "./compare/model/query";
 // Document

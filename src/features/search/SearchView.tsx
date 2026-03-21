@@ -31,7 +31,7 @@ export function SearchView({ searchQuery }: SearchViewProps) {
   const contentDocs = contentData?.pages.flatMap((p) => p.docs) ?? [];
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-10">
+    <div className="px-4 sm:px-0 w-full max-w-300 mx-auto flex flex-col gap-10">
       <div className="flex flex-col gap-10">
         <SearchResultGroup
           title={`'${searchQuery}'에 대한 문서명 검색 결과`}

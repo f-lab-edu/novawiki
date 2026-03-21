@@ -9,7 +9,7 @@ export function DocumentIndex({ content }: DocumentIndexProps) {
   const indexList = parseHeads(content);
 
   return (
-    <nav className="w-50 shrink-0">
+    <nav className="sm:w-50 shrink-0">
       <div className="sticky top-6 rounded-lg border p-4">
         <h3 className="font-semibold mb-1!">목차</h3>
         <ul className="flex flex-col gap-1 text-sm text-muted-foreground">
