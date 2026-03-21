@@ -2,17 +2,24 @@ import { createAdminClient } from "@/lib/supabase/server";
 
 export async function GET() {
   const supabase = createAdminClient();
+  const today = new Date().toISOString().split("T")[0];
+
   const query = supabase
-    .from("document")
+    .from("d_view")
     .select(
-      `*,
-      profile:document_profile_id_fkey (
-      nick
+      `
+      view,
+      document!inner (
+        title,
+        content,
+        updated_at
+      )
+    `,
     )
-  `,
-    )
-    .eq("isBlock", false)
-    .eq("isDisplay", true)
+    .eq("date", today)
+    .eq("document.isBlock", false)
+    .eq("document.isDisplay", true)
+    .order("view", { ascending: false })
     .limit(5);
 
   const { data, error } = await query;
@@ -28,9 +35,14 @@ export async function GET() {
     );
   }
 
+  const flat = data.map(({ view, document }) => ({
+    view,
+    ...document,
+  }));
+
   return Response.json({
     success: true,
-    data,
+    data: flat,
     errorCode: null,
     message: null,
   });

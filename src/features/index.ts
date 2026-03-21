@@ -1,7 +1,7 @@
 // Compare
 export { CompareView } from "./compare";
 // Document
-export { DocumentView } from "./document";
+export { DocumentRecorder, DocumentView } from "./document";
 // Edit
 export { EditForm } from "./edit";
 // History

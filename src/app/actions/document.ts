@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { decomposeKorean, tanslatePrimaryTitle } from "@/lib/utils/common";
 
 export interface DocumentState {
@@ -106,6 +106,26 @@ export async function deleteDocument(
   }
 
   return { error: null };
+}
+
+/** 문서 조회수 증가 (쿠키 중복 방지) */
+export async function incrementView(primaryTitle: string): Promise<void> {
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+
+  const cookieKey = `viewed_${primaryTitle}`;
+  if (cookieStore.has(cookieKey)) return;
+
+  const supabase = createAdminClient();
+  await supabase.rpc("increment_view", {
+    p_primary_title: decodeURIComponent(primaryTitle),
+  });
+
+  cookieStore.set(cookieKey, "1", {
+    maxAge: 60 * 60 * 12,
+    httpOnly: true,
+    path: "/",
+  });
 }
 
 /** 문서 되돌리기 */
