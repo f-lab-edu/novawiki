@@ -1,6 +1,6 @@
 export function HistoryTableHead() {
   return (
-    <div className="grid grid-cols-[25px_25px_25px_50px_50px_30px_1fr_30px] sm:grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px] gap-4 px-3 sm:px-4 py-3 bg-muted/50 text-sm font-medium">
+    <div className="grid grid-cols-[25px_25px_25px_50px_50px_30px_1fr_30px_30px] sm:grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px_80px] gap-4 px-3 sm:px-4 py-3 bg-muted/50 text-sm font-medium">
       <div className="text-center">이전</div>
       <div className="text-center">현재</div>
       <div className="text-center">버전</div>
@@ -9,6 +9,7 @@ export function HistoryTableHead() {
       <div className="text-center">작업내용</div>
       <div className="text-center">코멘트</div>
       <div className="text-center">보기</div>
+      <div className="text-center">되돌리기</div>
     </div>
   );
 }

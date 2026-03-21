@@ -5,6 +5,13 @@ import { useMemo } from "react";
 import type { DiffLineType } from "../../edit/model/types";
 import { CompareWordHighlight } from "./CompareWordHighlight";
 
+const REMOVE = "removed";
+const ADD = "added";
+const MODIFY = "modified";
+
+const isOldLine = (type: string) => type === REMOVE || type === MODIFY;
+const isNewLine = (type: string) => type === ADD || type === MODIFY;
+
 export function CompareDiffer({
   oldText,
   newText,
@@ -32,7 +39,7 @@ export function CompareDiffer({
         const addedContent = nextPart.value.replace(/\n$/, "");
 
         oldLines.push({
-          type: "modified",
+          type: MODIFY,
           content: removedContent,
           highlightedContent: (
             <CompareWordHighlight
@@ -43,7 +50,7 @@ export function CompareDiffer({
           ),
         });
         newLines.push({
-          type: "modified",
+          type: MODIFY,
           content: addedContent,
           highlightedContent: (
             <CompareWordHighlight
@@ -61,12 +68,12 @@ export function CompareDiffer({
       if (part?.added) {
         oldLines.push({ type: "normal", content: "" });
         newLines.push({
-          type: "added",
+          type: ADD,
           content: part.value.replace(/\n$/, ""),
         });
       } else if (part?.removed) {
         oldLines.push({
-          type: "removed",
+          type: REMOVE,
           content: part.value.replace(/\n$/, ""),
         });
         newLines.push({ type: "normal", content: "" });
@@ -103,18 +110,15 @@ export function CompareDiffer({
           <div className="font-mono text-sm">
             {Array.from({ length: maxLines }).map((_, idx) => {
               const line = oldLines[idx] || { type: "normal", content: "" };
-              return (
+              // 삭제, 수정된 내용만 표시
+              return isOldLine(line.type) ? (
                 <div
                   key={`${oldVersion}-${idx}-${line.highlightedContent}`}
-                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
-                    line.type === "removed" || line.type === "modified"
-                      ? "bg-red-50 dark:bg-red-950/30"
-                      : ""
-                  }`}
+                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap bg-red-50 dark:bg-red-950/30`}
                 >
                   {line.highlightedContent || line.content || "\u00A0"}
                 </div>
-              );
+              ) : null;
             })}
           </div>
         </div>
@@ -129,18 +133,15 @@ export function CompareDiffer({
           <div className="font-mono text-sm">
             {Array.from({ length: maxLines }).map((_, idx) => {
               const line = newLines[idx] || { type: "normal", content: "" };
-              return (
+              // 추가, 수정된 내용만 표시
+              return isNewLine(line.type) ? (
                 <div
                   key={`${newVersion}-${idx}-${line.highlightedContent}`}
-                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap ${
-                    line.type === "added" || line.type === "modified"
-                      ? "bg-green-50 dark:bg-green-950/30"
-                      : ""
-                  }`}
+                  className={`px-4 py-1 min-h-6 whitespace-pre-wrap bg-green-50 dark:bg-green-950/30`}
                 >
                   {line.highlightedContent || line.content || "\u00A0"}
                 </div>
-              );
+              ) : null;
             })}
           </div>
         </div>
