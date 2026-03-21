@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { writeDocument } from "@/app/actions/document";
 import { Button } from "@/components";
 import { Input } from "@/components/ui/shadcn/input";
+import { Spinner } from "@/components/ui/shadcn/spinner";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { documentQueryOptions } from "@/entities";
 import { documentQueryKey } from "@/entities/document/model/query";
@@ -141,7 +142,10 @@ export function EditForm({ id }: EditFormProps) {
             className="cursor-pointer"
             disabled={!agreed || !title.trim() || isPending}
           >
-            {isPending ? "저장 중..." : "저장"}
+            {isPending ? (
+              <Spinner data-icon="inline-start" className="size-4" />
+            ) : null}
+            저장
           </Button>
         </div>
       </div>

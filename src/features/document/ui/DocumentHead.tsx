@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { deleteDocument } from "@/app/actions/document";
 import { Button } from "@/components";
+import { ButtonGroup } from "@/components/ui/shadcn/button-group";
 import { formatDateTime, simpleMessageToast } from "@/lib/utils/common";
 import { useUserStore } from "@/store/useUserStore";
 import type { DocumentType } from "@/types";
@@ -50,11 +51,10 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
           {isOld ? doc.document?.title : doc.title}
         </h1>
         {!isOld ? (
-          <div className="flex mb-4! sm:m-0 w-full justify-end sm:items-center gap-2">
+          <ButtonGroup className="mb-4! sm:m-0 w-full justify-end sm:items-center">
             {/* 수정 */}
             <Button
               variant="outline"
-              size="sm"
               onClick={() => handleClickEdit(doc.title)}
               className="cursor-pointer"
             >
@@ -63,19 +63,22 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
             {/* 삭제 */}
             <Button
               variant="outline"
-              size="sm"
               onClick={() => handleClickDelete(doc.title)}
               className="cursor-pointer"
             >
               삭제
             </Button>
             {/* 역사 */}
-            <Link href={`/h/${doc.title}`} scroll>
-              <Button variant="outline" size="sm" className="cursor-pointer">
+            <Button variant="outline" className="cursor-pointer">
+              <Link
+                href={`/h/${doc.title}`}
+                scroll
+                className="w-full h-full flex justify-center items-center"
+              >
                 역사
-              </Button>
-            </Link>
-          </div>
+              </Link>
+            </Button>
+          </ButtonGroup>
         ) : (
           <></>
         )}

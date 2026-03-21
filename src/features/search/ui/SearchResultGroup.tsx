@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components";
+import { Spinner } from "@/components/ui/shadcn/spinner";
 import type { DocumentType } from "@/types";
 import { SearchResultCard } from "./SearchResultCard";
 import { SearchResultSection } from "./SearchResultSection";
@@ -49,7 +50,7 @@ export function SearchResultGroup({
               onClick={onLoadMore}
               disabled={isLoading}
             >
-              {isLoading ? "불러오는 중..." : "더 보기"}
+              {isLoading ? <Spinner /> : null}더 보기
             </Button>
           )}
         </div>
