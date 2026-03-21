@@ -1,6 +1,7 @@
 "use client";
 
 import "@/packages/markdown-editor/core/styles/editor.css";
+import { uploadDocumentImage } from "@/lib/storage/uploadImage";
 import { wikiLinkPlugin } from "@/lib/plugins/wikiLink";
 import { MarkdownEditor } from "@/packages/markdown-editor/react/src";
 
@@ -18,6 +19,7 @@ export function WikiEditor({ value, onChange, onSave }: WikiEditorProps) {
       onSave={onSave}
       height={400}
       plugins={[wikiLinkPlugin]}
+      uploadImage={uploadDocumentImage}
     />
   );
 }

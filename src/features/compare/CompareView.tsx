@@ -30,10 +30,12 @@ export function CompareView({ id, prev, next }: CompareViewProps) {
   }
 
   return (
-    <div className="w-full max-w-300 mx-auto flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">&apos;{title}&apos; 문서 비교</h1>
-        <Link href={`/d/${title}`}>
+    <div className="px-4 sm:px-0 w-full max-w-300 mx-auto flex flex-col gap-4">
+      <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-semibold">
+          &apos;{title}&apos; 문서 비교
+        </h1>
+        <Link href={`/d/${title}`} className="flex justify-end mb-4! sm:mb-0!">
           <Button className="cursor-pointer">최신 문서로</Button>
         </Link>
       </div>

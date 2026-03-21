@@ -208,13 +208,7 @@ export class Viewer {
     this.container = container;
     this.plugins = plugins;
     this.urlFilter = urlFilter;
-    this.container.classList.add(
-      "md-viewer",
-      "prose",
-      "prose-neutral",
-      "max-w-none",
-      "markdown-body",
-    );
+    this.container.classList.add("md-viewer", "markdown-body");
   }
 
   render(markdown: string): void {

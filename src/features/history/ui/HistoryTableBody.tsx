@@ -5,16 +5,24 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { historyQueryOptions } from "@/entities";
 import { getRelativeTime } from "@/lib/utils/common";
-import { useHistoryStore } from "@/store/useHistoryStore";
 
 type HistoryTableBodyProps = {
   title: string;
+  prev: number | null;
+  next: number | null;
+  setPrev: (version: number) => void;
+  setNext: (version: number) => void;
 };
 
-export function HistoryTableBody({ title }: HistoryTableBodyProps) {
+export function HistoryTableBody({
+  title,
+  prev,
+  next,
+  setPrev,
+  setNext,
+}: HistoryTableBodyProps) {
   const { data: response } = useQuery(historyQueryOptions(title));
   const history = response?.data ?? [];
-  const { prev, next, setPrev, setNext } = useHistoryStore();
 
   return (
     // 이력 목록
@@ -22,7 +30,7 @@ export function HistoryTableBody({ title }: HistoryTableBodyProps) {
       {history.map((item) => (
         <div
           key={item.id}
-          className="grid grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px] gap-4 px-4 py-3 text-sm hover:bg-muted/30 transition-colors"
+          className="text-xs sm:text-sm grid grid-cols-[25px_25px_25px_50px_50px_30px_1fr_30px] sm:grid-cols-[60px_60px_60px_120px_120px_100px_1fr_80px] gap-4 px-3 sm:px-4 py-3 hover:bg-muted/30 transition-colors"
         >
           <div className="flex justify-center">
             <input
