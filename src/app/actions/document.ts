@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { decomposeKorean, tanslatePrimaryTitle } from "@/lib/utils/common";
 
 export interface DocumentState {
@@ -103,6 +103,56 @@ export async function deleteDocument(
 
   if (error) {
     return { error: "문서 삭제에 실패했습니다." };
+  }
+
+  return { error: null };
+}
+
+/** 문서 조회수 증가 (쿠키 중복 방지) */
+export async function incrementView(primaryTitle: string): Promise<void> {
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+
+  const cookieKey = `viewed_${primaryTitle}`;
+  if (cookieStore.has(cookieKey)) return;
+
+  const supabase = createAdminClient();
+  await supabase.rpc("increment_view", {
+    p_primary_title: decodeURIComponent(primaryTitle),
+  });
+
+  cookieStore.set(cookieKey, "1", {
+    maxAge: 60 * 60 * 12,
+    httpOnly: true,
+    path: "/",
+  });
+}
+
+/** 문서 되돌리기 */
+export async function restoreDocument(
+  title: string,
+  targetVersion: number,
+): Promise<{ error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "로그인이 필요합니다." };
+  }
+
+  const primaryTitle = tanslatePrimaryTitle(title);
+
+  const { error } = await supabase.rpc("restore_document_with_history", {
+    p_primary_title: primaryTitle,
+    p_profile_id: user.id,
+    p_version: targetVersion,
+  });
+
+  if (error) {
+    return { error: "되돌리기에 실패했습니다." };
   }
 
   return { error: null };
