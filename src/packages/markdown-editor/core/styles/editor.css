@@ -49,3 +49,10 @@
     list-style: revert;
   }
 }
+
+/* sm 미만 (640px 미만) */
+@media (max-width: 639px) {
+  .markdown-body {
+    font-size: 14px;
+  }
+}
