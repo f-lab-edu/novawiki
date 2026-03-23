@@ -47,7 +47,7 @@ export function DocumentView({ id, v }: DocumentViewProps) {
   const isDisplay = doc.isDisplay;
 
   return (
-    <div className="w-full px-4 sm:px-0 max-w-300 mx-auto flex flex-col gap-12 relative">
+    <div className="w-full px-4 sm:px-0 max-w-300 mx-auto flex flex-col gap-8 sm:gap-12 relative">
       {!isDisplay && <DocumentDeletedBanner id={id} />}
       {isOld && isDisplay && <DocumentVersionBanner doc={doc} id={id} />}
 
