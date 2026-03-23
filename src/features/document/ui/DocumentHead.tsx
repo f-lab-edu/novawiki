@@ -47,7 +47,7 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col-reverse sm:flex-row items-center justify-between">
-        <h1 className="w-full text-4xl font-semibold">
+        <h1 className="w-full text-2xl sm:text-4xl font-semibold">
           {isOld ? doc.document?.title : doc.title}
         </h1>
         {!isOld ? (
@@ -56,7 +56,7 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
             <Button
               variant="outline"
               onClick={() => handleClickEdit(doc.title)}
-              className="cursor-pointer"
+              className="cursor-pointer h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
             >
               수정
             </Button>
@@ -64,19 +64,17 @@ export function DocumentHead({ doc, isOld }: DocumentHeadProps) {
             <Button
               variant="outline"
               onClick={() => handleClickDelete(doc.title)}
-              className="cursor-pointer"
+              className="cursor-pointer h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
             >
               삭제
             </Button>
             {/* 역사 */}
-            <Button variant="outline" className="cursor-pointer">
-              <Link
-                href={`/h/${doc.title}`}
-                scroll
-                className="w-full h-full flex justify-center items-center"
-              >
-                역사
-              </Link>
+            <Button
+              onClick={() => router.push(`/h/${doc.title}`)}
+              variant="outline"
+              className="cursor-pointer h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
+            >
+              역사
             </Button>
           </ButtonGroup>
         ) : (
