@@ -69,6 +69,7 @@ export function LoginForm() {
             onChange={handleUseridChange}
             placeholder="아이디"
             className="text-sm"
+            autoFocus
           />
         </Field>
         <Field>

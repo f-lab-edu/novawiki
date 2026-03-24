@@ -1,6 +1,7 @@
 "use client";
 
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import Link from "next/link";
 import { type RefObject, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/store/useUserStore";
@@ -24,7 +25,11 @@ export function ChatInput({
     return (
       <div className="p-3 border-t border-border bg-muted/30 text-center">
         <p className="text-xs text-muted-foreground">
-          채팅에 참여하려면 로그인이 필요합니다
+          채팅에 참여하려면&nbsp;
+          <Link href="/login" className="underline">
+            로그인
+          </Link>
+          이 필요합니다
         </p>
       </div>
     );

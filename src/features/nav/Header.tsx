@@ -1,6 +1,8 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { SearchIcon, UserIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,6 +13,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/shadcn/input-group";
+import { profileQueryOptions } from "@/entities";
 import { useUserStore } from "@/store/useUserStore";
 
 export function Header() {
@@ -18,6 +21,11 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { isAuthenticated, isLoading, clearUser } = useUserStore();
+  const { data } = useQuery({
+    ...profileQueryOptions(),
+    enabled: isAuthenticated,
+  });
+  const avatarUrl = data?.data?.avatar_url ?? null;
 
   const handleLogout = async () => {
     await logout();
@@ -63,17 +71,34 @@ export function Header() {
             >
               <SearchIcon className="w-5 h-5 text-muted-foreground" />
             </button>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               {isLoading ? (
-                <div className="w-20 h-9 bg-gray-200 animate-pulse rounded" />
+                <div className="w-8 h-8 bg-gray-200 animate-pulse rounded-full" />
               ) : isAuthenticated ? (
-                <Button
-                  variant="outline"
-                  className="cursor-pointer h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
-                  onClick={() => handleLogout()}
-                >
-                  로그아웃
-                </Button>
+                <div className="flex gap-2 items-center">
+                  <Link href="/my" aria-label="마이페이지">
+                    <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 cursor-pointer hover:opacity-80 transition-opacity">
+                      {avatarUrl ? (
+                        <Image
+                          src={avatarUrl}
+                          alt="프로필"
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <UserIcon className="w-4 h-4 text-gray-400" />
+                      )}
+                    </div>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="cursor-pointer h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
+                    onClick={handleLogout}
+                  >
+                    로그아웃
+                  </Button>
+                </div>
               ) : (
                 <>
                   <Link href="/login">
