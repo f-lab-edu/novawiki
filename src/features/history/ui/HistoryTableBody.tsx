@@ -34,7 +34,7 @@ export function HistoryTableBody({
     if (!user) {
       simpleMessageToast(
         "되돌리기 불가",
-        "로그인한 유저만 삭제할 수 있습니다.",
+        "로그인한 유저만 실행할 수 있습니다.",
       );
       return;
     }
