@@ -25,7 +25,7 @@ export function ChatInput({
     return (
       <div className="p-3 border-t border-border bg-muted/30 text-center">
         <p className="text-xs text-muted-foreground">
-          채팅에 참여하려면
+          채팅에 참여하려면&nbsp;
           <Link href="/login" className="underline">
             로그인
           </Link>

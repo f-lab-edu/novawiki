@@ -10,6 +10,8 @@ export { HistoryView } from "./history";
 export { HomeView } from "./home";
 // Login
 export { LoginForm } from "./login-form";
+// My
+export { MyView } from "./my";
 // Nav
 export { Footer, Header } from "./nav";
 // Search
