@@ -46,17 +46,19 @@ export function HistoryView({ title }: HistoryListProps) {
 
       {/* 이력 테이블 */}
       <div className="rounded-lg border overflow-x-auto">
-        {/* 테이블 헤더 */}
-        <HistoryTableHead />
+        <div className="min-w-max">
+          {/* 테이블 헤더 */}
+          <HistoryTableHead />
 
-        {/* 이력 목록 */}
-        <HistoryTableBody
-          title={title}
-          prev={prev}
-          next={next}
-          setPrev={setPrev}
-          setNext={setNext}
-        />
+          {/* 이력 목록 */}
+          <HistoryTableBody
+            title={title}
+            prev={prev}
+            next={next}
+            setPrev={setPrev}
+            setNext={setNext}
+          />
+        </div>
       </div>
     </div>
   );
