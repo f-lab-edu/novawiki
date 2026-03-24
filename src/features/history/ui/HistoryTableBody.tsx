@@ -57,7 +57,7 @@ export function HistoryTableBody({
       {history.map((item) => (
         <div
           key={item.id}
-          className="text-xs sm:text-sm grid grid-cols-[25px_25px_25px_50px_50px_1fr_30px_50px] sm:grid-cols-[60px_60px_60px_120px_120px_1fr_80px_120px] gap-4 px-3 sm:px-4 py-3 hover:bg-muted/30 transition-colors"
+          className="text-xs sm:text-sm grid grid-cols-[25px_25px_25px_50px_50px_80px_30px_50px] sm:grid-cols-[60px_60px_60px_120px_120px_1fr_80px_120px] gap-6 px-3 sm:px-4 py-3 hover:bg-muted/30 transition-colors"
         >
           {/* 이전 */}
           <div className="flex justify-center w-6.25 sm:w-15">
@@ -69,6 +69,7 @@ export function HistoryTableBody({
               className="size-4 cursor-pointer"
             />
           </div>
+
           {/* 다음 */}
           <div className="flex justify-center w-6.25 sm:w-15">
             <input
@@ -79,20 +80,25 @@ export function HistoryTableBody({
               className="size-4 cursor-pointer"
             />
           </div>
+
           {/* 버전 */}
           <div className="font-medium text-center w-6.25 sm:w-15">
             v{item.version}
           </div>
+
           {/* 수정시간 */}
           <div className="text-muted-foreground text-center w-13 sm:w-30">
             {getRelativeTime(item.created_at)}
           </div>
+
           {/* 닉네임 */}
           <div className="text-center w-13 sm:w-30">{item.profile?.nick}</div>
+
           {/* 코멘트(작업내용) */}
-          <div className="text-muted-foreground text-center min-w-30 max-w-30 sm:max-w-max sm:min-w-30">
+          <div className="text-muted-foreground text-center w-20 sm:w-auto">
             {item.comment}
           </div>
+
           {/* 보기 */}
           <div className="flex justify-center w-7.5 sm:w-20">
             <Link href={`/d/${title}?v=${item.version}`}>
@@ -101,6 +107,7 @@ export function HistoryTableBody({
               </Button>
             </Link>
           </div>
+
           {/* 되돌리기 */}
           <div className="flex justify-center w-13 sm:w-30">
             {item.comment === "되돌리기" || item.comment === "삭제" ? (
