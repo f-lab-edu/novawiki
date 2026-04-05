@@ -79,8 +79,3 @@ src/
 - `[[Document Title]]` — wiki-style internal links
 - Korean jamo decomposition search supported via `decomposeKorean` in `lib/utils/common.ts`
 
-### 작업 내용 정리해달라고하면, git pr description에 들어갈 내용 정리한다고 간주 (must)
-- 요약, 변경내용으로 나눠서 작성
-- 항상 마크다운 형식으로 작성
-- 바로 복사해서 사용할 수 있게 작성 (스타일이 적용되지 않은 마크다운으로 정리)
-
