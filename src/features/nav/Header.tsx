@@ -14,11 +14,12 @@ import {
   InputGroupInput,
 } from "@/components/ui/shadcn/input-group";
 import { profileQueryOptions } from "@/entities";
+import { SearchAutocomplete } from "@/features/search";
 import { useUserStore } from "@/store/useUserStore";
 
 export function Header() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [mobileSearchQuery, setMobileSearchQuery] = useState("");
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { isAuthenticated, isLoading, clearUser } = useUserStore();
   const { data } = useQuery({
@@ -32,9 +33,9 @@ export function Header() {
     clearUser();
   };
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+  const handleMobileSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && mobileSearchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(mobileSearchQuery.trim())}`);
     }
   };
 
@@ -50,17 +51,7 @@ export function Header() {
           <div className="flex items-center gap-3 sm:gap-5">
             {/* 데스크탑 검색창 */}
             <div className="hidden sm:flex">
-              <InputGroup>
-                <InputGroupInput
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleSearch}
-                />
-                <InputGroupAddon>
-                  <SearchIcon />
-                </InputGroupAddon>
-              </InputGroup>
+              <SearchAutocomplete />
             </div>
             {/* 모바일 검색 아이콘 */}
             <button
@@ -123,9 +114,9 @@ export function Header() {
           <InputGroup>
             <InputGroupInput
               placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearch}
+              value={mobileSearchQuery}
+              onChange={(e) => setMobileSearchQuery(e.target.value)}
+              onKeyDown={handleMobileSearch}
               autoFocus
               className="text-sm"
             />
