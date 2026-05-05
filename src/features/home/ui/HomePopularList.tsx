@@ -114,7 +114,7 @@ export function HomePopularList() {
 
   let popularList: DocumentType[] | null;
 
-  if (!data || !data?.data || data?.data?.length < 1) {
+  if (!data || !data?.data || data?.data?.length < 5) {
     popularList = mockData;
   } else {
     popularList = data.data;
