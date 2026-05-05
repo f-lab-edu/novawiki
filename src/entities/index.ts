@@ -17,5 +17,8 @@ export type { HistoryType } from "./history/model/types";
 export { profileQueryOptions } from "./profile/model/query";
 export type { ProfileType } from "./profile/model/types";
 // Search
-export { searchInfiniteQueryOptions } from "./search/model/query";
+export {
+  searchInfiniteQueryOptions,
+  searchQueryOptions,
+} from "./search/model/query";
 export type { SearchResponse } from "./search/model/types";
