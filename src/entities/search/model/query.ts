@@ -1,8 +1,8 @@
 import { infiniteQueryOptions } from "@tanstack/react-query";
-import type { ApiResponse, SearchResponse } from "@/entities";
+import type { ApiResponse } from "@/entities";
 import { fetcher } from "@/lib/utils/fetcher";
 import { defaultQueryKey, defaultQueryOptions } from "@/lib/utils/query";
-import type { DocumentType } from "@/types";
+import type { SearchResponse } from "./types";
 
 type SearchQueryType = "title" | "content";
 
@@ -14,7 +14,7 @@ export const searchQueryOptions = (
   type?: SearchQueryType,
   page?: number,
 ) =>
-  defaultQueryOptions<DocumentType[]>(
+  defaultQueryOptions<SearchResponse>(
     searchQueryKey(query, type, page),
     `/api/document/search?q=${encodeURIComponent(query)}&type=${type}&page=${page}`,
   );
