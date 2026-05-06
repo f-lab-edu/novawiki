@@ -16,7 +16,7 @@ import { cn } from "@/lib/shadcn/utils";
 const LISTBOX_ID = "search-autocomplete-listbox";
 const itemId = (id: number) => `search-autocomplete-item-${id}`;
 
-export function SearchAutocomplete() {
+export function Autocomplete() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,21 +29,19 @@ export function SearchAutocomplete() {
   const { data } = useQuery({
     ...searchQueryOptions(debouncedQuery, "title", 0),
     enabled: debouncedQuery.trim().length > 0,
-    staleTime: 30_000,
+    staleTime: 30000,
   });
 
   const items = data?.data?.docs ?? [];
   const isOpen =
     isFocused && debouncedQuery.trim().length > 0 && items.length > 0;
 
-  // Clamp selectedIndex when items shrink.
   useEffect(() => {
     if (selectedIndex >= items.length) {
       setSelectedIndex(items.length === 0 ? -1 : items.length - 1);
     }
   }, [items.length, selectedIndex]);
 
-  // Outside click → close.
   useEffect(() => {
     if (!isOpen) return;
     const onMouseDown = (e: MouseEvent) => {
@@ -61,9 +59,9 @@ export function SearchAutocomplete() {
     setSelectedIndex(-1);
   };
 
-  const goToDoc = (id: number) => {
+  const goToDoc = (title: string) => {
     closeDropdown();
-    router.push(`/d/${id}`);
+    router.push(`/d/${title}`);
   };
 
   const goToSearch = () => {
@@ -74,6 +72,8 @@ export function SearchAutocomplete() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return;
+
     if (e.key === "ArrowDown" && isOpen) {
       e.preventDefault();
       setSelectedIndex((i) => Math.min(i + 1, items.length - 1));
@@ -90,7 +90,7 @@ export function SearchAutocomplete() {
       e.preventDefault();
       const selected = isOpen ? items[selectedIndex] : undefined;
       if (selected) {
-        goToDoc(selected.id);
+        goToDoc(selected.title);
       } else {
         goToSearch();
       }
@@ -116,6 +116,7 @@ export function SearchAutocomplete() {
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setSelectedIndex(-1);
+            setIsFocused(true);
           }}
           onFocus={() => setIsFocused(true)}
           onKeyDown={handleKeyDown}
@@ -134,7 +135,7 @@ export function SearchAutocomplete() {
         <div
           id={LISTBOX_ID}
           role="listbox"
-          className="absolute top-full left-0 right-0 mt-1 z-50 bg-popover text-popover-foreground border rounded-md shadow-md overflow-hidden"
+          className="absolute top-full left-0 right-0 mt-1! z-50 bg-popover text-popover-foreground border rounded-md shadow-md overflow-hidden"
         >
           {items.map((doc, index) => {
             const isSelected = index === selectedIndex;
@@ -147,7 +148,7 @@ export function SearchAutocomplete() {
                 aria-selected={isSelected}
                 onMouseEnter={() => setSelectedIndex(index)}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => goToDoc(doc.id)}
+                onClick={() => goToDoc(doc.title)}
                 className={cn(
                   "w-full text-left px-3 py-2 text-sm cursor-pointer truncate",
                   isSelected

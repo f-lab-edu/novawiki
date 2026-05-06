@@ -14,8 +14,8 @@ import {
   InputGroupInput,
 } from "@/components/ui/shadcn/input-group";
 import { profileQueryOptions } from "@/entities";
-import { SearchAutocomplete } from "@/features/search";
 import { useUserStore } from "@/store/useUserStore";
+import { Autocomplete } from "./ui/Autocomplete";
 
 export function Header() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export function Header() {
           <div className="flex items-center gap-3 sm:gap-5">
             {/* 데스크탑 검색창 */}
             <div className="hidden sm:flex">
-              <SearchAutocomplete />
+              <Autocomplete />
             </div>
             {/* 모바일 검색 아이콘 */}
             <button
